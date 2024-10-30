@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "modelinspect"
+version = "0.1.0"
+description = "Inspect Ai Models"
+authors = ["interwebshack <22042209+interwebshack@users.noreply.github.com>"]
+license = "MIT License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "24.10.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311']
