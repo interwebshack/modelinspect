@@ -1,25 +1,48 @@
 import click
 from modelinspect.logger import configure_logging, logger
 from pathlib import Path
-from functools import wraps
 
-def logging_decorator(func):
+def display_ascii_art() -> None:
     """
-    A decorator that initializes the logger before running any command.
-    This ensures logging is initialized only after a command has started.
+    Displays ASCII art before logging initialization.
     """
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        # Initialize logging before running the actual command
-        log_file = Path.cwd() / "logs/cli.log"
-        configure_logging(log_file)
-        logger.debug(f"Logging initialized. Logs will be written to: {log_file}")
-        return func(*args, **kwargs)
-    
-    return wrapper
+    art = r"""
+     __  __           _      _   _____                           _   
+    |  \/  |         | |    | | |_   _|                         | |  
+    | \  / | ___   __| | ___| |   | |  _ __  ___ _ __   ___  ___| |_ 
+    | |\/| |/ _ \ / _` |/ _ \ |   | | | '_ \/ __| '_ \ / _ \/ __| __|
+    | |  | | (_) | (_| |  __/ |  _| |_| | | \__ \ |_) |  __/ (__| |_ 
+    |_|  |_|\___/ \__,_|\___|_| |_____|_| |_|___/ .__/ \___|\___|\__|
+                                                | |                  
+                                                |_|                  
+    """
+    print(art)
 
-@click.group(context_settings=dict(help_option_names=['-h', '--help']), invoke_without_command=False)
-def cli() -> None:
+class CustomGroup(click.Group):
+    def invoke(self, ctx):
+        # Display ASCII art before logging initialization
+        display_ascii_art()
+
+        # Initialize logging before running any command
+        log_file = Path.cwd() / "modelinspect.log"
+        config_file = Path.cwd() / "config.yaml"
+
+        # Initialize logging and get the log level
+        log_level = configure_logging(log_file, config_file)
+
+        # Log the level and where logs will be written
+        logger.info(f"Logging initialized at {log_level} level.")
+        logger.info(f"Logs will be written to: {log_file}")
+
+        # Now invoke the original command
+        super().invoke(ctx)
+
+    def format_help(self, ctx, formatter):
+        display_ascii_art()
+        super().format_help(ctx, formatter)
+
+@click.group(cls=CustomGroup, context_settings=dict(help_option_names=['-h', '--help']))
+def cli():
     """ModelInspect command-line tool for inspecting AI/ML models."""
     pass
 
@@ -28,7 +51,6 @@ def cli() -> None:
 @click.option("--uppercase", is_flag=True, help="Convert data to uppercase.")
 @click.option("--repeat", type=int, default=1, show_default=True, help="Number of times to repeat the data.")
 @click.option("--suffix", type=str, default="", show_default=True, help="String to append to the data.")
-@logging_decorator
 def process(data: str, uppercase: bool, repeat: int, suffix: str) -> None:
     """
     Processes the given DATA and logs the output with optional parameters.
@@ -49,7 +71,6 @@ def process(data: str, uppercase: bool, repeat: int, suffix: str) -> None:
 
 @cli.command()
 @click.argument("name")
-@logging_decorator
 def greet(name: str) -> None:
     """
     Greets the given NAME with a simple message.
