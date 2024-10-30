@@ -1,6 +1,6 @@
 from loguru import logger
 from pathlib import Path
-from modelinspect.config import load_config
+from modelinspect.config import load_config, ConfigError
 
 
 def configure_logging(log_file: Path, config_file: Path) -> str:
@@ -14,15 +14,15 @@ def configure_logging(log_file: Path, config_file: Path) -> str:
     Returns:
         str: The configured log level.
     """
-    # Load YAML configuration
-    config = load_config(config_file)
-
-    if not config or 'logging' not in config:
-        # If the config is None or does not have 'logging' section, default to INFO
-        log_level = 'INFO'
-    else:
-        # Safely get the log level from config
-        log_level = config.get('logging', {}).get('level', 'INFO')
+    try:
+        # Load and verify YAML configuration
+        config = load_config(config_file)
+    except ConfigError as e:
+        # Handle configuration errors (fall back to defaults)
+        logger.warning(f"Configuration error: {e}. Using default log level 'INFO'.")
+        config = {'logging': {'level': 'INFO'}}
+    
+    log_level = config.get('logging', {}).get('level', 'INFO')
 
     logger.remove()  # Remove the default logger configuration
     

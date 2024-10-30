@@ -1,22 +1,46 @@
 import yaml
 from pathlib import Path
 
+class ConfigError(Exception):
+    """Custom exception for configuration errors."""
+    pass
+
 def load_config(config_file: Path) -> dict:
     """
-    Loads the YAML configuration file.
+    Loads and verifies the YAML configuration file.
 
     Args:
         config_file (Path): Path to the YAML config file.
 
     Returns:
-        dict: Dictionary containing the configuration or None if the file cannot be loaded.
+        dict: Dictionary containing the configuration.
+
+    Raises:
+        ConfigError: If the file is missing or the content is invalid.
     """
     if not config_file.exists():
-        return None
-
+        raise ConfigError(f"Configuration file '{config_file}' not found.")
+    
     try:
         with open(config_file, 'r') as file:
-            return yaml.safe_load(file)
+            config = yaml.safe_load(file)
+
+            # Validate the presence of required sections
+            if 'logging' not in config:
+                raise ConfigError("Missing 'logging' section in the configuration file.")
+            
+            # Additional validation for logging section
+            valid_levels = {'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'}
+            log_level = config['logging'].get('level')
+
+            if not log_level or log_level not in valid_levels:
+                raise ConfigError(
+                    f"Invalid log level '{log_level}' in the 'logging' section. "
+                    f"Must be one of {', '.join(valid_levels)}."
+                )
+
+            return config
+
     except yaml.YAMLError as e:
-        print(f"Error reading config file: {e}")
-        return None
+        # Re-raise the YAML parsing error with context
+        raise ConfigError(f"Error parsing YAML file: {e}") from e
