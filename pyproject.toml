@@ -5,6 +5,8 @@ description = "Model Inspect is a tool for inspecting the contents of Ai Models.
 authors = ["interwebshack <22042209+interwebshack@users.noreply.github.com>"]
 license = "MIT License"
 readme = "README.md"
+packages = [{ include = "modelinspect" }]
+exclude = ["tests/*"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
