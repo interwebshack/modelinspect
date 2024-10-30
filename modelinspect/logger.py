@@ -16,8 +16,4 @@ def configure_logging(log_file: Path) -> None:
 
     # Log to a file in CWD with rotation after 1 MB
     logger.add(log_file, format="{time} {level} {message}", level="DEBUG", rotation="1 MB")
-    
-    logger.info(f"Logging initialized. Logs will be written to: {log_file}")
 
-
-__all__ = ["configure_logging", "logger"]
