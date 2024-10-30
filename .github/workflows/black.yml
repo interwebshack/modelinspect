@@ -15,4 +15,4 @@ jobs:
         with:
           options: "--check --verbose"
           src: "./modelinspect"
-          use_pyproject: true
+          version: "24.10.0"
