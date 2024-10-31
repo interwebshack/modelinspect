@@ -1,6 +1,8 @@
-from loguru import logger
 from pathlib import Path
-from modelinspect.config import load_config, ConfigError
+
+from loguru import logger
+
+from modelinspect.config import ConfigError, load_config
 
 
 def configure_logging(log_file: Path, config_file: Path) -> str:
@@ -20,12 +22,12 @@ def configure_logging(log_file: Path, config_file: Path) -> str:
     except ConfigError as e:
         # Handle configuration errors (fall back to defaults)
         logger.warning(f"Configuration error: {e}. Using default log level 'INFO'.")
-        config = {'logging': {'level': 'INFO'}}
-    
-    log_level = config.get('logging', {}).get('level', 'INFO')
+        config = {"logging": {"level": "INFO"}}
+
+    log_level = config.get("logging", {}).get("level", "INFO")
 
     logger.remove()  # Remove the default logger configuration
-    
+
     # Log to the console with dynamic log level
     logger.add(lambda msg: print(msg, end=""), format="{time} {level} {message}", level=log_level)
 
