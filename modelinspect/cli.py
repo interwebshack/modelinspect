@@ -1,6 +1,9 @@
-import click
-from modelinspect.logger import configure_logging, logger
 from pathlib import Path
+
+import click
+
+from modelinspect.logger import configure_logging, logger
+
 
 def display_ascii_art() -> None:
     """
@@ -17,6 +20,7 @@ def display_ascii_art() -> None:
                                                 |_|                  
     """
     print(art)
+
 
 class CustomGroup(click.Group):
     def invoke(self, ctx):
@@ -41,16 +45,22 @@ class CustomGroup(click.Group):
         display_ascii_art()
         super().format_help(ctx, formatter)
 
-@click.group(cls=CustomGroup, context_settings=dict(help_option_names=['-h', '--help']))
+
+@click.group(cls=CustomGroup, context_settings=dict(help_option_names=["-h", "--help"]))
 def cli():
     """ModelInspect command-line tool for inspecting AI/ML models."""
     pass
 
+
 @cli.command()
 @click.argument("data")
 @click.option("--uppercase", is_flag=True, help="Convert data to uppercase.")
-@click.option("--repeat", type=int, default=1, show_default=True, help="Number of times to repeat the data.")
-@click.option("--suffix", type=str, default="", show_default=True, help="String to append to the data.")
+@click.option(
+    "--repeat", type=int, default=1, show_default=True, help="Number of times to repeat the data."
+)
+@click.option(
+    "--suffix", type=str, default="", show_default=True, help="String to append to the data."
+)
 def process(data: str, uppercase: bool, repeat: int, suffix: str) -> None:
     """
     Processes the given DATA and logs the output with optional parameters.
@@ -68,6 +78,7 @@ def process(data: str, uppercase: bool, repeat: int, suffix: str) -> None:
 
     click.echo(f"Processing data: {data}")
     click.echo(f"Final result: {processed_data}")
+
 
 @cli.command()
 @click.argument("name")
