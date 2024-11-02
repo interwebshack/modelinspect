@@ -20,4 +20,4 @@ This project is heavily inspired by the following projects:
 * [PickleScan](https://github.com/mmaitre314/picklescan)  
 * [ModelScan](https://github.com/protectai/modelscan)  
 * [Fickling](https://github.com/trailofbits/fickling)  
-* [cpython](https://github.com/python/cpython)  
+* [cpython-zipfile](https://github.com/akheron/cpython/blob/master/Lib/zipfile.py)  
