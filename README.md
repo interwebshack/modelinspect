@@ -16,4 +16,7 @@ MIT (See [LICENSE](./LICENSE))
 
 ## Acknowledgements
 
-We were heavily inspired by [Matthieu Maitre](http://mmaitre314.github.io) who built [PickleScan](https://github.com/mmaitre314/picklescan) and [protectai](https://protectai.com/) who built [ModelScan](https://github.com/protectai/modelscan). We appreciate the work and have developed a similar tool with ModelInspect.  
+This project is heavily inspired by the following projects: 
+* [PickleScan](https://github.com/mmaitre314/picklescan)  
+* [ModelScan](https://github.com/protectai/modelscan)  
+* [Fickling](https://github.com/trailofbits/fickling)  
