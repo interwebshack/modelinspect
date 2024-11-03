@@ -17,7 +17,7 @@ import sys
 import threading
 import time
 import warnings
-from typing import BinaryIO, Callable, ClassVar, Dict, List, Optional, Tuple, Type, Union
+from typing import BinaryIO, Callable, ClassVar, Dict, List, Optional, Tuple, Union
 
 try:
     import zlib  # We may need its compression method
