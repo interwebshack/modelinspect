@@ -17,7 +17,7 @@ import sys
 import threading
 import time
 import warnings
-from typing import BinaryIO, Callable, ClassVar, Dict, List, Optional, Tuple, Union
+from typing import IO, Any, BinaryIO, Callable, ClassVar, Dict, List, Optional, Tuple, Union
 
 try:
     import zlib  # We may need its compression method
@@ -903,13 +903,49 @@ class ZipDecrypter:
 
 
 class LZMADecompressor:
+    """
+    A custom LZMA decompressor class for decompressing data in chunks with support
+    for raw LZMA format.
 
-    def __init__(self):
-        self._decomp = None
-        self._unconsumed = b""
-        self.eof = False
+    Attributes:
+        eof (bool): Indicates if the end of the file has been reached during decompression.
+    """
 
-    def decompress(self, data):
+    def __init__(self) -> None:
+        """
+        Initializes the LZMADecompressor with internal states for decompression.
+
+        Raises:
+            RuntimeError: If lzma module is not available.
+        """
+        if not LZMA_AVAILABLE:
+            raise RuntimeError("LZMA module is not available. Ensure lzma is installed.")
+
+        self._decomp: Optional[lzma.LZMADecompressor] = None
+        self._unconsumed: bytes = b""
+        self.eof: bool = False
+
+    def decompress(self, data: bytes) -> bytes:
+        """
+        Decompresses the provided LZMA compressed data.
+
+        Args:
+            data (bytes): The data to be decompressed.
+
+        Returns:
+            bytes: The decompressed data.
+
+        Notes:
+            This method initializes the decompressor on the first call by reading
+            filter properties from the initial bytes of data. It continues to
+            decompress data in chunks until the end of the file.
+
+        Raises:
+            RuntimeError: If decompression is attempted when lzma is not available.
+        """
+        if not LZMA_AVAILABLE:
+            raise RuntimeError("LZMA module is not available. Decompression cannot proceed.")
+
         if self._decomp is None:
             self._unconsumed += data
             if len(self._unconsumed) <= 4:
@@ -918,13 +954,10 @@ class LZMADecompressor:
             if len(self._unconsumed) <= 4 + psize:
                 return b""
 
+            filter_props = self._unconsumed[4 : 4 + psize]
             self._decomp = lzma.LZMADecompressor(
                 lzma.FORMAT_RAW,
-                filters=[
-                    lzma._decode_filter_properties(
-                        lzma.FILTER_LZMA1, self._unconsumed[4 : 4 + psize]
-                    )
-                ],
+                filters=[{"id": lzma.FILTER_LZMA1, "props": filter_props}],
             )
             data = self._unconsumed[4 + psize :]
             del self._unconsumed
@@ -955,7 +988,17 @@ compressor_names = {
 }
 
 
-def _check_compression(compression):
+def _check_compression(compression: int) -> None:
+    """
+    Checks if the required compression module is available for the given compression type.
+
+    Args:
+        compression (int): The compression type identifier.
+
+    Raises:
+        RuntimeError: If the required compression module is missing.
+        NotImplementedError: If the compression type is not supported.
+    """
     if compression == ZIP_STORED:
         pass
     elif compression == ZIP_DEFLATED:
@@ -971,11 +1014,36 @@ def _check_compression(compression):
         raise NotImplementedError("That compression method is not supported")
 
 
-def _get_decompressor(compress_type):
+# Use `Any` as a fallback for the zlib decompressor type to support fallback to binascii
+DecompressorType = Optional[Union[Any, bz2.BZ2Decompressor, LZMADecompressor]]
+
+
+def _get_decompressor(compress_type: int) -> DecompressorType:
+    """
+    Returns a decompressor object based on the specified compression type.
+
+    Args:
+        compress_type (int): The compression type identifier.
+
+    Returns:
+        DecompressorType:
+            The decompressor object for the specified compression type,
+            or None if no decompression is needed.
+
+    Raises:
+        NotImplementedError: If the compression type is not supported.
+        RuntimeError: If the required compression module (e.g., zlib for ZIP_DEFLATED) is
+        not available.
+    """
     _check_compression(compress_type)
+
     if compress_type == ZIP_STORED:
         return None
     elif compress_type == ZIP_DEFLATED:
+        if not ZLIB_AVAILABLE:
+            raise RuntimeError(
+                "Compression type ZIP_DEFLATED requires the zlib module, which is not available."
+            )
         return zlib.decompressobj(-15)
     elif compress_type == ZIP_BZIP2:
         return bz2.BZ2Decompressor()
@@ -984,24 +1052,78 @@ def _get_decompressor(compress_type):
     else:
         descr = compressor_names.get(compress_type)
         if descr:
-            raise NotImplementedError("compression type %d (%s)" % (compress_type, descr))
+            raise NotImplementedError(f"compression type {compress_type} ({descr})")
         else:
-            raise NotImplementedError("compression type %d" % (compress_type,))
+            raise NotImplementedError(f"compression type {compress_type}")
 
 
 class _SharedFile:
-    def __init__(self, file, pos, close, lock, writing):
-        self._file = file
-        self._pos = pos
-        self._close = close
-        self._lock = lock
-        self._writing = writing
-        self.seekable = file.seekable
+    """
+    A class for managing shared, thread-safe access to a file with controlled read and write
+    operations.
 
-    def tell(self):
+    This class provides methods for reading, seeking, and closing the file with lock-based
+    thread safety.  It ensures that reading and seeking operations are blocked if a writing
+    handle is open on the file.
+
+    Attributes:
+        seekable (Callable[[], bool]): A method to check if the file supports seeking.
+    """
+
+    def __init__(
+        self,
+        file: IO[bytes],
+        pos: int,
+        close: Callable[[IO[bytes]], None],
+        lock: threading.Lock,
+        writing: Callable[[], bool],
+    ) -> None:
+        """
+        Initializes a _SharedFile instance.
+
+        Args:
+            file (IO[bytes]): The binary file object to manage.
+            pos (int): The current position in the file.
+            close (Callable[[IO[bytes]], None]): A callable to close the file.
+            lock (threading.Lock): A lock to ensure thread-safe access to the file.
+            writing (Callable[[], bool]): A function that returns True if a writing handle is open
+            on the file.
+        """
+        self._file: Optional[IO[bytes]] = file
+        self._pos: int = pos
+        self._close: Callable[[IO[bytes]], None] = close
+        self._lock: threading.Lock = lock
+        self._writing: Callable[[], bool] = writing
+        self.seekable: Callable[[], bool] = file.seekable
+
+    def tell(self) -> int:
+        """
+        Returns the current file position.
+
+        Returns:
+            int: The current position in the file.
+        """
         return self._pos
 
-    def seek(self, offset, whence=0):
+    def seek(self, offset: int, whence: int = 0) -> int:
+        """
+        Repositions the file cursor.
+
+        Args:
+            offset (int): The offset to move to, relative to `whence`.
+            whence (int): The reference point for the offset
+                          (default is 0, i.e., the start of the file).
+
+        Returns:
+            int: The new position in the file.
+
+        Raises:
+            ValueError: If attempting to reposition while a writing handle is open.
+            RuntimeError: If the file is already closed.
+        """
+        if self._file is None:
+            raise RuntimeError("File is closed.")
+
         with self._lock:
             if self._writing():
                 raise ValueError(
@@ -1013,7 +1135,24 @@ class _SharedFile:
             self._pos = self._file.tell()
             return self._pos
 
-    def read(self, n=-1):
+    def read(self, n: int = -1) -> bytes:
+        """
+        Reads data from the file.
+
+        Args:
+            n (int): The number of bytes to read
+                     (default is -1, which reads until the end of the file).
+
+        Returns:
+            bytes: The data read from the file.
+
+        Raises:
+            ValueError: If attempting to read while a writing handle is open.
+            RuntimeError: If the file is already closed.
+        """
+        if self._file is None:
+            raise RuntimeError("File is closed.")
+
         with self._lock:
             if self._writing():
                 raise ValueError(
@@ -1026,7 +1165,10 @@ class _SharedFile:
             self._pos = self._file.tell()
             return data
 
-    def close(self):
+    def close(self) -> None:
+        """
+        Closes the file if it is open by calling the provided close function.
+        """
         if self._file is not None:
             fileobj = self._file
             self._file = None
