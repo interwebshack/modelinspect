@@ -529,6 +529,7 @@ class ZipInfo:
         self.file_size: int = 0  # Size of the uncompressed file
         self.crc_value: int = 0  # CRC-32 of the uncompressed file
         self.header_offset: Optional[int] = None  # Byte offset to the file header
+        self._raw_time: Optional[int] = None  # Raw time data, set externally
         self._end_offset: Optional[int] = (
             None  # Start of the next local header or central directory
         )
@@ -1177,28 +1178,76 @@ class _SharedFile:
 
 # Provide the tell method for unseekable stream
 class _Tellable:
-    def __init__(self, fp):
-        self.fp = fp
-        self.offset = 0
+    """
+    A wrapper class that adds tell functionality to unseekable file-like objects.
 
-    def write(self, data):
+    This class maintains an internal offset that tracks the write position, providing a
+    `tell` method to get the current position. It can be used with file-like objects that
+    do not natively support seeking or position tracking.
+
+    Attributes:
+        fp (BinaryIO): The underlying file-like object being wrapped.
+        offset (int): The current write position in the file-like object.
+    """
+
+    def __init__(self, fp: BinaryIO) -> None:
+        """
+        Initializes a _Tellable instance.
+
+        Args:
+            fp (BinaryIO): The underlying file-like object to wrap.
+        """
+        self.fp: BinaryIO = fp
+        self.offset: int = 0
+
+    def write(self, data: bytes) -> int:
+        """
+        Writes data to the file-like object and updates the current position.
+
+        Args:
+            data (bytes): The data to write.
+
+        Returns:
+            int: The number of bytes written.
+        """
         n = self.fp.write(data)
         self.offset += n
         return n
 
-    def tell(self):
+    def tell(self) -> int:
+        """
+        Returns the current position in the file-like object.
+
+        Returns:
+            int: The current write position, tracked by the offset.
+        """
         return self.offset
 
-    def flush(self):
+    def flush(self) -> None:
+        """Flushes the underlying file-like object."""
         self.fp.flush()
 
-    def close(self):
+    def close(self) -> None:
+        """Closes the underlying file-like object."""
         self.fp.close()
 
 
 class ZipExtFile(io.BufferedIOBase):
-    """File-like object for reading an archive member.
+    """
+    File-like object for reading a file entry within a ZIP archive.
     Is returned by ZipFile.open().
+
+    This class enables reading data from compressed ZIP archive members,
+    managing decompression, CRC checking, optional decryption, and
+    seeking within the compressed data if supported by the underlying file object.
+
+    Attributes:
+        MAX_N (int): Maximum size supported by decompressor.
+        MIN_READ_SIZE (int): Block size for reading compressed data.
+        MAX_SEEK_READ (int): Chunk size for reading during seek operations.
+        mode (str): Mode in which the file is opened.
+        name (str): The filename of the archive member.
+        newlines (Optional[str]): Line separator used if text mode is specified.
     """
 
     # Max size supported by decompressor.
@@ -1210,7 +1259,24 @@ class ZipExtFile(io.BufferedIOBase):
     # Chunk size to read during seek
     MAX_SEEK_READ = 1 << 24
 
-    def __init__(self, fileobj, mode, zipinfo, pwd=None, close_fileobj=False):
+    def __init__(
+        self,
+        fileobj: io.BufferedIOBase,
+        mode: str,
+        zipinfo: ZipInfo,
+        pwd: Optional[bytes] = None,
+        close_fileobj: bool = False,
+    ) -> None:
+        """
+        Initializes a ZipExtFile instance for reading a compressed archive member.
+
+        Args:
+            fileobj (io.BufferedIOBase): The file object for reading the ZIP file.
+            mode (str): The mode in which the file is opened ('r' for reading).
+            zipinfo: The ZipInfo object with details about the archive member.
+            pwd (Optional[bytes]): The password for decrypting the archive member (if needed).
+            close_fileobj (bool): If True, closes the file object when the instance is closed.
+        """
         self._fileobj = fileobj
         self._pwd = pwd
         self._close_fileobj = close_fileobj
@@ -1219,23 +1285,29 @@ class ZipExtFile(io.BufferedIOBase):
         self._compress_left = zipinfo.compress_size
         self._left = zipinfo.file_size
 
+        # Initialize decompressor based on compression type
         self._decompressor = _get_decompressor(self._compress_type)
 
         self._eof = False
         self._readbuffer = b""
         self._offset = 0
 
-        self.newlines = None
+        self.newlines: Optional[str] = None
 
-        self.mode = mode
-        self.name = zipinfo.filename
+        self.mode: str = mode
+        self.name: str = zipinfo.filename
 
-        if hasattr(zipinfo, "CRC"):
-            self._expected_crc = zipinfo.CRC
-            self._running_crc = crc32(b"")
+        # Declare _expected_crc as Optional[int] to allow None
+        self._expected_crc: Optional[int] = None
+        self._running_crc: int = crc32(b"")
+
+        # Check for CRC and set initial value
+        if hasattr(zipinfo, "crc_value"):
+            self._expected_crc = zipinfo.crc_value
         else:
             self._expected_crc = None
 
+        # Attempt to determine if the file object supports seeking
         self._seekable = False
         try:
             if fileobj.seekable():
@@ -1248,20 +1320,53 @@ class ZipExtFile(io.BufferedIOBase):
         except AttributeError:
             pass
 
-        self._decrypter = None
+        # Initialize decrypter if password-protected
+        # Define _decrypter as Optional[ZipDecrypter] to accommodate both None
+        # and ZipDecrypter instances
+        self._decrypter: Optional[ZipDecrypter] = None
+
         if pwd:
             if zipinfo.flag_bits & _MASK_USE_DATA_DESCRIPTOR:
-                # compare against the file type from extended local headers
-                check_byte = (zipinfo._raw_time >> 8) & 0xFF
+                # Use extended local headers for decryption check
+                # Ensure that _raw_time is not None before using it
+                if zipinfo._raw_time is not None:
+                    check_byte = (zipinfo._raw_time >> 8) & 0xFF
+                else:
+                    raise ValueError(
+                        "Missing _raw_time value in ZipInfo; cannot perform decryption check."
+                    )
             else:
-                # compare against the CRC otherwise
-                check_byte = (zipinfo.CRC >> 24) & 0xFF
+                # Use CRC for decryption check otherwise
+                check_byte = (zipinfo.crc_value >> 24) & 0xFF
             h = self._init_decrypter()
             if h != check_byte:
-                raise RuntimeError("Bad password for file %r" % zipinfo.orig_filename)
+                raise RuntimeError(f"Bad password for file {zipinfo.orig_filename!r}")
 
-    def _init_decrypter(self):
-        self._decrypter = _zip_decrypter(self._pwd)
+    def _init_decrypter(self) -> Optional[int]:
+        """
+        Initializes the decrypter for encrypted ZIP files.
+
+        This method sets up the decryption mechanism if a password (`_pwd`) is provided.
+        It reads the encryption header, which consists of the first 12 bytes in the
+        cipher stream. The first 11 bytes are random, while the 12th byte contains
+        a value used to check password correctness (either the MSB of the CRC or the
+        MSB of the file time, depending on the ZIP header type).
+
+        Returns:
+            int: The 12th byte of the decrypted header, used to check password correctness.
+
+        Raises:
+            RuntimeError: If `_pwd` or `_fileobj` is not set, and decryption is attempted.
+        """
+        if not self._pwd:
+            raise RuntimeError("Password is required for decryption.")
+        if not self._fileobj:
+            raise RuntimeError("File object is required for reading encrypted data.")
+
+        # Initialize decrypter with the provided password
+        self._decrypter = ZipDecrypter(self._pwd)
+
+        # Read the first 12 bytes from the file object as the encryption header
         # The first 12 bytes in the cypher stream is an encryption header
         #  used to strengthen the algorithm. The first 11 bytes are
         #  completely random, while the 12th contains the MSB of the CRC,
@@ -1269,29 +1374,51 @@ class ZipExtFile(io.BufferedIOBase):
         #  and is used to check the correctness of the password.
         header = self._fileobj.read(12)
         self._compress_left -= 12
-        return self._decrypter(header)[11]
 
-    def __repr__(self):
-        result = ["<%s.%s" % (self.__class__.__module__, self.__class__.__qualname__)]
+        # Decrypt the header and return the 12th byte, used for password verification
+        decrypted_header = self._decrypter.decrypt(header)
+        return decrypted_header[11]
+
+    def __repr__(self) -> str:
+        """
+        Generates a string representation of the ZipExtFile instance.
+
+        This representation includes the class module, name, file name,
+        and compression type if the file is open. If the file is closed,
+        the representation indicates that.
+
+        Returns:
+            str: A string representation of the ZipExtFile instance.
+        """
+        result: List[str] = [f"<{self.__class__.__module__}.{self.__class__.__qualname__}"]
         if not self.closed:
-            result.append(" name=%r" % (self.name,))
+            result.append(f" name={self.name!r}")
             if self._compress_type != ZIP_STORED:
                 result.append(
-                    " compress_type=%s"
-                    % compressor_names.get(self._compress_type, self._compress_type)
+                    f" compress_type="
+                    f"{compressor_names.get(self._compress_type, self._compress_type)}"
                 )
         else:
             result.append(" [closed]")
         result.append(">")
         return "".join(result)
 
-    def readline(self, limit=-1):
-        """Read and return a line from the stream.
+    def readline(self, limit: Optional[int] = -1) -> bytes:
+        """
+        Read and return a line from the stream.
 
-        If limit is specified, at most limit bytes will be read.
+        This method reads bytes from the stream until a newline byte is found
+        or until `limit` bytes have been read, whichever comes first.
+
+        Args:
+            limit (Optional[int]): The maximum number of bytes to read. If negative,
+                reads until a newline is encountered or the end of the buffer.
+
+        Returns:
+            bytes: The line read from the stream, including the newline character if found.
         """
 
-        if limit < 0:
+        if limit is not None and limit < 0:
             # Shortcut common case - newline found in buffer.
             i = self._readbuffer.find(b"\n", self._offset) + 1
             if i > 0:
@@ -1299,23 +1426,47 @@ class ZipExtFile(io.BufferedIOBase):
                 self._offset = i
                 return line
 
-        return io.BufferedIOBase.readline(self, limit)
+        return super().readline(limit)
 
-    def peek(self, n=1):
-        """Returns buffered bytes without advancing the position."""
+    def peek(self, n: int = 1) -> bytes:
+        """
+        Return up to `n` bytes from the buffer without advancing the position.
+
+        This method attempts to return buffered bytes up to a maximum of 512 bytes,
+        reducing allocation overhead in tight loops. If there aren’t enough bytes in
+        the buffer, it reads more data into the buffer without moving the file position.
+
+        Args:
+            n (int): The number of bytes to attempt to peek from the buffer. Defaults to 1.
+
+        Returns:
+            bytes: The bytes read from the buffer without changing the current offset.
+        """
+
         if n > len(self._readbuffer) - self._offset:
             chunk = self.read(n)
             if len(chunk) > self._offset:
+                # Extend the buffer with new data and reset the offset
                 self._readbuffer = chunk + self._readbuffer[self._offset :]
                 self._offset = 0
             else:
+                # Adjust the offset if fewer bytes were read than requested
                 self._offset -= len(chunk)
 
         # Return up to 512 bytes to reduce allocation overhead for tight loops.
         return self._readbuffer[self._offset : self._offset + 512]
 
-    def readable(self):
-        if self.closed:
+    def readable(self) -> bool:
+        """
+        Check if the file is open and readable.
+
+        Raises:
+            ValueError: If the file is closed.
+
+        Returns:
+            bool: `True` if the file is open and readable, otherwise raises an exception.
+        """
+        if self.closed:  # pylint: disable=using-constant-test
             raise ValueError("I/O operation on closed file.")
         return True
 
@@ -1323,7 +1474,7 @@ class ZipExtFile(io.BufferedIOBase):
         """Read and return up to n bytes.
         If the argument is omitted, None, or negative, data is read and returned until EOF is reached.
         """
-        if self.closed:
+        if self.closed:  # pylint: disable=using-constant-test
             raise ValueError("read from closed file.")
         if n is None or n < 0:
             buf = self._readbuffer[self._offset :]
@@ -1463,12 +1614,12 @@ class ZipExtFile(io.BufferedIOBase):
             super().close()
 
     def seekable(self):
-        if self.closed:
+        if self.closed:  # pylint: disable=using-constant-test
             raise ValueError("I/O operation on closed file.")
         return self._seekable
 
     def seek(self, offset, whence=os.SEEK_SET):
-        if self.closed:
+        if self.closed:  # pylint: disable=using-constant-test
             raise ValueError("seek on closed file.")
         if not self._seekable:
             raise io.UnsupportedOperation("underlying stream is not seekable")
@@ -1532,7 +1683,7 @@ class ZipExtFile(io.BufferedIOBase):
         return self.tell()
 
     def tell(self):
-        if self.closed:
+        if self.closed:  # pylint: disable=using-constant-test
             raise ValueError("tell on closed file.")
         if not self._seekable:
             raise io.UnsupportedOperation("underlying stream is not seekable")
