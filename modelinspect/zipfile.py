@@ -1497,13 +1497,27 @@ class ZipExtFile(io.BufferedIOBase):
             raise ValueError("I/O operation on closed file.")
         return True
 
-    def read(self, n=-1):
-        """Read and return up to n bytes.
-        If the argument is omitted, None, or negative, data is read and returned until EOF is reached.
+    def read(self, n: Optional[int] = -1) -> bytes:
+        """Read and return up to `n` bytes from the stream.
+
+        If `n` is omitted, `None`, or negative, reads until EOF is reached.
+        If the file is closed, raises a `ValueError`.
+
+        Args:
+            n (Optional[int]): The number of bytes to read. If `None` or negative,
+                reads until the end of the file.
+
+        Returns:
+            bytes: The data read from the stream.
+
+        Raises:
+            ValueError: If an attempt is made to read from a closed file.
         """
         if self.closed:  # pylint: disable=using-constant-test
-            raise ValueError("read from closed file.")
+            raise ValueError("Read from closed file.")
+
         if n is None or n < 0:
+            # Read until EOF if n is None or negative
             buf = self._readbuffer[self._offset :]
             self._readbuffer = b""
             self._offset = 0
@@ -1513,10 +1527,12 @@ class ZipExtFile(io.BufferedIOBase):
 
         end = n + self._offset
         if end < len(self._readbuffer):
+            # Return the data directly from the buffer if it’s already available
             buf = self._readbuffer[self._offset : end]
             self._offset = end
             return buf
 
+        # Otherwise, read the remaining data needed
         n = end - len(self._readbuffer)
         buf = self._readbuffer[self._offset :]
         self._readbuffer = b""
@@ -1524,12 +1540,14 @@ class ZipExtFile(io.BufferedIOBase):
         while n > 0 and not self._eof:
             data = self._read1(n)
             if n < len(data):
+                # If more data was read than needed, store the excess
                 self._readbuffer = data
                 self._offset = n
                 buf += data[:n]
                 break
             buf += data
             n -= len(data)
+
         return buf
 
     def _update_crc(self, newdata):
@@ -1579,30 +1597,42 @@ class ZipExtFile(io.BufferedIOBase):
                     break
         return buf
 
-    def _read1(self, n):
-        # Read up to n compressed bytes with at most one read() system call,
-        # decrypt and decompress them.
+    def _read1(self, n: int) -> bytes:
+        """Read up to `n` compressed bytes with at most one `read()` system call,
+        decrypt and decompress them as needed.
+
+        This method handles unconsumed data for compressed streams and manages EOF status.
+        It also updates the CRC (Cyclic Redundancy Check) for data integrity verification.
+
+        Args:
+            n (int): The maximum number of compressed bytes to read.
+
+        Returns:
+            bytes: The decompressed and decrypted data, up to `n` bytes or until EOF.
+
+        Raises:
+            ValueError: If an unsupported compression type is encountered.
+        """
         if self._eof or n <= 0:
             return b""
 
-        # Read from file.
+        # Read from file based on compression type.
         if self._compress_type == ZIP_DEFLATED:
-            ## Handle unconsumed data.
+            # Handle unconsumed data.
             data = self._decompressor.unconsumed_tail
             if n > len(data):
                 data += self._read2(n - len(data))
         else:
             data = self._read2(n)
 
+        # Process data based on compression type.
         if self._compress_type == ZIP_STORED:
             self._eof = self._compress_left <= 0
         elif self._compress_type == ZIP_DEFLATED:
             n = max(n, self.MIN_READ_SIZE)
             data = self._decompressor.decompress(data, n)
-            self._eof = (
-                self._decompressor.eof
-                or self._compress_left <= 0
-                and not self._decompressor.unconsumed_tail
+            self._eof = self._decompressor.eof or (
+                self._compress_left <= 0 and not self._decompressor.unconsumed_tail
             )
             if self._eof:
                 data += self._decompressor.flush()
@@ -1610,10 +1640,13 @@ class ZipExtFile(io.BufferedIOBase):
             data = self._decompressor.decompress(data)
             self._eof = self._decompressor.eof or self._compress_left <= 0
 
+        # Adjust data length and update internal state.
         data = data[: self._left]
         self._left -= len(data)
         if self._left <= 0:
             self._eof = True
+
+        # Update CRC for the data.
         self._update_crc(data)
         return data
 
@@ -1719,15 +1752,14 @@ class ZipExtFile(io.BufferedIOBase):
 
 
 class ZipFile:
-    """Class with methods to open, read, write, close, list zip files.
+    """Class with methods to open, read, close, list zip files.
 
     z = ZipFile(file, mode="r", compression=ZIP_STORED, allowZip64=True,
                 compresslevel=None)
 
     file: Either the path to the file, or a file-like object.
           If it is a path, the file will be opened and closed by ZipFile.
-    mode: The mode can be either read 'r', write 'w', exclusive create 'x',
-          or append 'a'.
+    mode: The mode can be read 'r'.
     compression: ZIP_STORED (no compression), ZIP_DEFLATED (requires zlib),
                  ZIP_BZIP2 (requires bz2) or ZIP_LZMA (requires lzma).
     allowZip64: if True ZipFile will create files with ZIP64 extensions when
@@ -1755,10 +1787,9 @@ class ZipFile:
         strict_timestamps=True,
         metadata_encoding=None,
     ):
-        """Open the ZIP file with mode read 'r', write 'w', exclusive create 'x',
-        or append 'a'."""
-        if mode not in ("r", "w", "x", "a"):
-            raise ValueError("ZipFile requires mode 'r', 'w', 'x', or 'a'")
+        """Open the ZIP file with mode read 'r'."""
+        if mode not in ("r"):
+            raise ValueError("ZipFile requires mode 'r'")
 
         _check_compression(compression)
 
@@ -1788,12 +1819,7 @@ class ZipFile:
             self.filename = file
             modeDict = {
                 "r": "rb",
-                "w": "w+b",
-                "x": "x+b",
-                "a": "r+b",
                 "r+b": "w+b",
-                "w+b": "wb",
-                "x+b": "xb",
             }
             filemode = modeDict[mode]
             while True:
@@ -1817,38 +1843,8 @@ class ZipFile:
         try:
             if mode == "r":
                 self._RealGetContents()
-            elif mode in ("w", "x"):
-                # set the modified flag so central directory gets written
-                # even if no files are added to the archive
-                self._didModify = True
-                try:
-                    self.start_dir = self.fp.tell()
-                except (AttributeError, OSError):
-                    self.fp = _Tellable(self.fp)
-                    self.start_dir = 0
-                    self._seekable = False
-                else:
-                    # Some file-like objects can provide tell() but not seek()
-                    try:
-                        self.fp.seek(self.start_dir)
-                    except (AttributeError, OSError):
-                        self._seekable = False
-            elif mode == "a":
-                try:
-                    # See if file is a zip file
-                    self._RealGetContents()
-                    # seek to start of directory and overwrite
-                    self.fp.seek(self.start_dir)
-                except BadZipFile:
-                    # file is not a zip file, just append
-                    self.fp.seek(0, 2)
-
-                    # set the modified flag so central directory gets written
-                    # even if no files are added to the archive
-                    self._didModify = True
-                    self.start_dir = self.fp.tell()
             else:
-                raise ValueError("Mode must be 'r', 'w', 'x', or 'a'")
+                raise ValueError("Mode must be 'r'")
         except:
             fp = self.fp
             self.fp = None
@@ -2059,20 +2055,12 @@ class ZipFile:
         name is a string for the file name within the ZIP file, or a ZipInfo
         object.
 
-        mode should be 'r' to read a file already in the ZIP file, or 'w' to
-        write to a file newly added to the archive.
+        mode should be 'r' to read a file already in the ZIP file.
 
         pwd is the password to decrypt files (only used for reading).
-
-        When writing, if the file size is not known in advance but may exceed
-        2 GiB, pass force_zip64 to use the ZIP64 format, which can handle large
-        files.  If the size is known in advance, it is best to pass a ZipInfo
-        instance for name, with zinfo.file_size set.
         """
-        if mode not in {"r", "w"}:
-            raise ValueError('open() requires mode "r" or "w"')
-        if pwd and (mode == "w"):
-            raise ValueError("pwd is only supported for reading files")
+        if mode not in {"r"}:
+            raise ValueError('open() requires mode "r"')
         if not self.fp:
             raise ValueError("Attempt to use ZIP archive that was already closed")
 
@@ -2080,23 +2068,9 @@ class ZipFile:
         if isinstance(name, ZipInfo):
             # 'name' is already an info object
             zinfo = name
-        elif mode == "w":
-            zinfo = ZipInfo(name)
-            zinfo.compress_type = self.compression
-            zinfo.compress_level = self.compresslevel
         else:
             # Get info object for name
             zinfo = self.getinfo(name)
-
-        if mode == "w":
-            return self._open_to_write(zinfo, force_zip64=force_zip64)
-
-        if self._writing:
-            raise ValueError(
-                "Can't read from the ZIP file while there "
-                "is an open writing handle on it. "
-                "Close the writing handle before trying to read."
-            )
 
         # Open for reading:
         self._fileRefCnt += 1
@@ -2261,28 +2235,13 @@ class ZipFile:
         self.close()
 
     def close(self):
-        """Close the file, and for mode 'w', 'x' and 'a' write the ending
-        records."""
+        """Close the file"""
         if self.fp is None:
             return
 
-        if self._writing:
-            raise ValueError(
-                "Can't close the ZIP file while there is "
-                "an open writing handle on it. "
-                "Close the writing handle before closing the zip."
-            )
-
-        try:
-            if self.mode in ("w", "x", "a") and self._didModify:  # write ending records
-                with self._lock:
-                    if self._seekable:
-                        self.fp.seek(self.start_dir)
-                    self._write_end_record()
-        finally:
-            fp = self.fp
-            self.fp = None
-            self._fpclose(fp)
+        fp = self.fp
+        self.fp = None
+        self._fpclose(fp)
 
     def _fpclose(self, fp):
         assert self._fileRefCnt > 0
