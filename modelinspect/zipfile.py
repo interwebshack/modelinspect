@@ -283,6 +283,15 @@ def _end_rec_data_64(
     if len(data) != sizeEndCentDir64Locator:
         return endrec
     sig, diskno, reloff, disks = struct.unpack(structEndArchive64Locator, data)
+
+    # The relative offset of the ZIP64 end-of-central-directory record
+    # The function assumes that the ZIP64 End of Central Directory (EOCD) record is located
+    # immediately before the End of Central Directory Locator in the file. Therefore, it
+    # seeks to offset - sizeEndCentDir64Locator - sizeEndCentDir64 rather than using reloff.
+    # This approach skips the need to go back and forth in the file, assuming a fixed structure
+    # instead.  We are deleting the variable to satisfy pylint Unused variable 'reloff' issue.
+    del reloff
+
     if sig != stringEndArchive64Locator:
         return endrec
 
@@ -295,10 +304,10 @@ def _end_rec_data_64(
     if len(data) != sizeEndCentDir64:
         return endrec
     (
-        sig,
-        sz,
-        create_version,
-        read_version,
+        sig,  # "signature" field in the ZIP64 End of Central Directory (EOCD)
+        sz,  # size of the ZIP64 End of Central Directory (EOCD) record in bytes.
+        create_version,  # "version made by" field in the ZIP64 EOCD record.
+        read_version,  # "version needed to extract" field in the ZIP64 EOCD record.
         disk_num,
         disk_dir,
         dircount,
@@ -308,6 +317,24 @@ def _end_rec_data_64(
     ) = struct.unpack(structEndArchive64, data)
     if sig != stringEndArchive64:
         return endrec
+
+    # Although sz is extracted here, it’s not used further in the function. In a more detailed
+    # implementation, sz could be checked against the actual data read to ensure consistency or
+    # to confirm that the ZIP64 EOCD record has been read correctly.
+    # We are deleting the variable to satisfy pylint Unused variable 'sz' issue.
+    del sz
+
+    # In this function, `create_version`` is extracted but not used further. In more detailed
+    # implementations, it could help handle compatibility checks, determine specific features
+    # within the ZIP file, or adjust processing based on the creation platform.
+    # We are deleting the variable to satisfy pylint Unused variable 'create_version' issue.
+    del create_version
+
+    # In this function, `read_version`` is extracted but not utilized further. It could,
+    # however, be used in a more detailed implementation to verify that the ZIP file’s
+    # format requirements match the capabilities of the reading software or library.
+    # We are deleting the variable to satisfy pylint Unused variable 'read_version' issue.
+    del read_version
 
     # Update the original endrec using data from the ZIP64 record
     endrec[_ZIP64_SIGNATURE] = sig
