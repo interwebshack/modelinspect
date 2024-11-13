@@ -1,4 +1,4 @@
-from model_inspect.analyzers.zipfile.constants import ZIP_BZIP2, ZIP_DEFLATED, ZIP_LZMA, ZIP_STORED
+from model_inspect.analyzers.zip_file.constants import ZIP_BZIP2, ZIP_DEFLATED, ZIP_LZMA, ZIP_STORED
 
 # from .compression import Compressor
 # from .decompression import Decompressor
