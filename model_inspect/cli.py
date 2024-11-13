@@ -2,7 +2,7 @@ from pathlib import Path
 
 import click
 
-from modelinspect.logger import configure_logging, logger
+from model_inspect.logger import configure_logging, logger
 
 
 def display_ascii_art() -> None:

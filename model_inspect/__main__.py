@@ -1,4 +1,4 @@
-from modelinspect.cli import cli
+from model_inspect.cli import cli
 
 if __name__ == "__main__":
     # standalone_mode=False:

@@ -2,7 +2,7 @@ from pathlib import Path
 
 from loguru import logger
 
-from modelinspect.config import ConfigError, load_config
+from model_inspect.config import ConfigError, load_config
 
 
 def configure_logging(log_file: Path, config_file: Path) -> str:
