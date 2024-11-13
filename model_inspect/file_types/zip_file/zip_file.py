@@ -47,24 +47,6 @@ class BadZipFile(Exception):
     """Raised when a ZIP file is found to be corrupt."""
 
 
-ZIP64_LIMIT = (1 << 31) - 1
-ZIP_FILECOUNT_LIMIT = (1 << 16) - 1
-ZIP_MAX_COMMENT = (1 << 16) - 1
-
-# constants for Zip file compression methods
-ZIP_STORED = 0
-ZIP_DEFLATED = 8
-ZIP_BZIP2 = 12
-ZIP_LZMA = 14
-# Other ZIP compression methods not supported
-
-DEFAULT_VERSION = 20
-ZIP64_VERSION = 45
-BZIP2_VERSION = 46
-LZMA_VERSION = 63
-# we recognize (but not necessarily support) all features up to that version
-MAX_EXTRACT_VERSION = 63
-
 # Below are some formats and associated data for reading headers using
 # the struct module.  The names and structures of headers/records are those used
 # in the PKWARE description of the ZIP file format:
@@ -77,80 +59,11 @@ structEndArchive = b"<4s4H2LH"
 stringEndArchive = b"PK\005\006"
 sizeEndCentDir = struct.calcsize(structEndArchive)
 
-_ECD_SIGNATURE = 0
-_ECD_DISK_NUMBER = 1
-_ECD_DISK_START = 2
-_ECD_ENTRIES_THIS_DISK = 3
-_ECD_ENTRIES_TOTAL = 4
-_ECD_SIZE = 5
-_ECD_OFFSET = 6
-_ECD_COMMENT_SIZE = 7
-# These last two indices are not part of the structure as defined in the
-# spec, but they are used internally by this module as a convenience
-_ECD_COMMENT = 8
-_ECD_LOCATION = 9
-
-# Constants for ZIP64-specific end-of-central-directory fields
-_ZIP64_SIGNATURE = "signature"
-_ZIP64_DISK_NUMBER = "disk_number"
-_ZIP64_DISK_START = "disk_start"
-_ZIP64_ENTRIES_THIS_DISK = "entries_this_disk"
-_ZIP64_ENTRIES_TOTAL = "entries_total"
-_ZIP64_SIZE = "size"
-_ZIP64_OFFSET = "offset"
-
 # The "central directory" structure, magic number, size, and indices
 # of entries in the structure (section V.F in the format document)
 structCentralDir = "<4s4B4HL2L5H2L"
 stringCentralDir = b"PK\001\002"
 sizeCentralDir = struct.calcsize(structCentralDir)
-
-# indexes of entries in the central directory structure
-_CD_SIGNATURE = 0
-_CD_CREATE_VERSION = 1
-_CD_CREATE_SYSTEM = 2
-_CD_EXTRACT_VERSION = 3
-_CD_EXTRACT_SYSTEM = 4
-_CD_FLAG_BITS = 5
-_CD_COMPRESS_TYPE = 6
-_CD_TIME = 7
-_CD_DATE = 8
-_CD_CRC = 9
-_CD_COMPRESSED_SIZE = 10
-_CD_UNCOMPRESSED_SIZE = 11
-_CD_FILENAME_LENGTH = 12
-_CD_EXTRA_FIELD_LENGTH = 13
-_CD_COMMENT_LENGTH = 14
-_CD_DISK_NUMBER_START = 15
-_CD_INTERNAL_FILE_ATTRIBUTES = 16
-_CD_EXTERNAL_FILE_ATTRIBUTES = 17
-_CD_LOCAL_HEADER_OFFSET = 18
-
-# General purpose bit flags
-# Zip Appnote: 4.4.4 general purpose bit flag: (2 bytes)
-_MASK_ENCRYPTED = 1 << 0
-# Bits 1 and 2 have different meanings depending on the compression used.
-_MASK_COMPRESS_OPTION_1 = 1 << 1
-# _MASK_COMPRESS_OPTION_2 = 1 << 2
-# _MASK_USE_DATA_DESCRIPTOR: If set, crc-32, compressed size and uncompressed
-# size are zero in the local header and the real values are written in the data
-# descriptor immediately following the compressed data.
-_MASK_USE_DATA_DESCRIPTOR = 1 << 3
-# Bit 4: Reserved for use with compression method 8, for enhanced deflating.
-# _MASK_RESERVED_BIT_4 = 1 << 4
-_MASK_COMPRESSED_PATCH = 1 << 5
-_MASK_STRONG_ENCRYPTION = 1 << 6
-# _MASK_UNUSED_BIT_7 = 1 << 7
-# _MASK_UNUSED_BIT_8 = 1 << 8
-# _MASK_UNUSED_BIT_9 = 1 << 9
-# _MASK_UNUSED_BIT_10 = 1 << 10
-_MASK_UTF_FILENAME = 1 << 11
-# Bit 12: Reserved by PKWARE for enhanced compression.
-# _MASK_RESERVED_BIT_12 = 1 << 12
-# _MASK_ENCRYPTED_CENTRAL_DIR = 1 << 13
-# Bit 14, 15: Reserved by PKWARE
-# _MASK_RESERVED_BIT_14 = 1 << 14
-# _MASK_RESERVED_BIT_15 = 1 << 15
 
 # The "local file header" structure, magic number, size, and indices
 # (section V.A in the format document)
@@ -158,18 +71,6 @@ structFileHeader = "<4s2B4HL2L2H"
 stringFileHeader = b"PK\003\004"
 sizeFileHeader = struct.calcsize(structFileHeader)
 
-_FH_SIGNATURE = 0
-_FH_EXTRACT_VERSION = 1
-_FH_EXTRACT_SYSTEM = 2
-_FH_GENERAL_PURPOSE_FLAG_BITS = 3
-_FH_COMPRESSION_METHOD = 4
-_FH_LAST_MOD_TIME = 5
-_FH_LAST_MOD_DATE = 6
-_FH_CRC = 7
-_FH_COMPRESSED_SIZE = 8
-_FH_UNCOMPRESSED_SIZE = 9
-_FH_FILENAME_LENGTH = 10
-_FH_EXTRA_FIELD_LENGTH = 11
 
 # The "Zip64 end of central directory locator" structure, magic number, and size
 structEndArchive64Locator = "<4sLQL"
@@ -181,19 +82,6 @@ sizeEndCentDir64Locator = struct.calcsize(structEndArchive64Locator)
 structEndArchive64 = "<4sQ2H2L4Q"
 stringEndArchive64 = b"PK\x06\x06"
 sizeEndCentDir64 = struct.calcsize(structEndArchive64)
-
-_CD64_SIGNATURE = 0
-_CD64_DIRECTORY_RECSIZE = 1
-_CD64_CREATE_VERSION = 2
-_CD64_EXTRACT_VERSION = 3
-_CD64_DISK_NUMBER = 4
-_CD64_DISK_NUMBER_START = 5
-_CD64_NUMBER_ENTRIES_THIS_DISK = 6
-_CD64_NUMBER_ENTRIES_TOTAL = 7
-_CD64_DIRECTORY_SIZE = 8
-_CD64_OFFSET_START_CENTDIR = 9
-
-_DD_SIGNATURE = 0x08074B50
 
 
 def _check_zipfile(fp: BinaryIO) -> bool:
