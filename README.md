@@ -9,8 +9,9 @@ Model Inspect is a tool for inspecting the contents of Ai Models.
 
 ```shell
 model_inspect/
-├── analyzers/
-│   └── zipfile/                  # Zip File Analyzer
+├── file_types/
+    ├── __init__.py               # Package initializer
+│   └── zip_file/                 # Zip File Binary
 │       ├── __init__.py           # Package initializer
 │       ├── decompression.py      # Decompression-related classes and functions
 │       ├── decryption.py         # Decryption logic
@@ -21,7 +22,7 @@ model_inspect/
 │       └── constants.py          # Constants used across the package
 └── tests/                        # Directory for unit tests
     ├── __init__.py
-    └── analyzers/
+    └── file_types/
         ├── __init__.py
         └── zipfile/
             ├── __init__.py
