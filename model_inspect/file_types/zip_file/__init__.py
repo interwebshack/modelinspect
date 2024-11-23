@@ -1,4 +1,11 @@
-from model_inspect.analyzers.zip_file.constants import ZIP_BZIP2, ZIP_DEFLATED, ZIP_LZMA, ZIP_STORED
+""" File Type: Zip File Init """
+
+from model_inspect.file_types.zip_file.constants import (
+    ZIP_BZIP2,
+    ZIP_DEFLATED,
+    ZIP_LZMA,
+    ZIP_STORED,
+)
 
 # from .compression import Compressor
 # from .decompression import Decompressor

@@ -3,10 +3,10 @@ constants.py
 
 This module defines a set of constants used throughout the ZIP file handling package.
 The constants are organized by category, covering various aspects of ZIP file processing,
-including compression types, file format identifiers, buffer sizes, encryption settings, 
-error messages, ZIP version requirements, and structural fields. 
+including compression types, file format identifiers, buffer sizes, encryption settings,
+error messages, ZIP version requirements, and structural fields.
 
-These constants serve as fixed reference points, helping ensure consistency and 
+These constants serve as fixed reference points, helping ensure consistency and
 readability across modules that rely on them for handling ZIP file operations.
 
 Sections:
@@ -29,9 +29,28 @@ Sections:
 
 Usage:
     Import this module to access constants in other ZIP file processing modules:
-    
+
     from model_inspect.analyzers.zipfile.constants import ZIP_DEFLATED, MAX_READ_SIZE
 """
+compressor_names = {
+    0: "store",
+    1: "shrink",
+    2: "reduce",
+    3: "reduce",
+    4: "reduce",
+    5: "reduce",
+    6: "implode",
+    7: "tokenize",
+    8: "deflate",
+    9: "deflate64",
+    10: "implode",
+    12: "bzip2",
+    14: "lzma",
+    18: "terse",
+    19: "lz77",
+    97: "wavpack",
+    98: "ppmd",
+}
 
 # Compression Types
 ZIP_STORED = 0  # No compression
