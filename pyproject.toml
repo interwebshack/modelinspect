@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "modelinspect"
-version = "0.1.0"
+version = "0.0.0"
 description = "ModelInspect command-line tool for inspecting AI/ML models."
 authors = ["interwebshack <22042209+interwebshack@users.noreply.github.com>"]
 license = "MIT License"
@@ -9,17 +9,17 @@ packages = [{ include = "modelinspect" }]
 exclude = ["tests/*"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-loguru = "^0.7.2"
-click = "^8.1.7"
-pyyaml = "^6.0.2"
+python = ">=3.10,<4.0"
+rich = "^14.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
-black = "24.10.0"
-mypy = "^1.13.0"
-pylint = "^3.3.1"
-pytest-cov = "^6.0.0"
+black = "^25.1.0"
+isort = "^6.0.1"
+mypy = "^1.15.0"
+pylint = "^3.3.7"
+pytest-cov = "^6.1.1"
+vulture = "^2.14"
 
 [build-system]
 requires = ["poetry-core"]
@@ -30,4 +30,4 @@ modelinspect = "modelinspect.cli:cli"
 
 [tool.black]
 line-length = 100
-target-version = ['py39', 'py310', 'py311']
+target-version = ['py310', 'py311', 'py312']
