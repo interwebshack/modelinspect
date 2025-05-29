@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "modelinspect"
 version = "0.0.0"
-description = "ModelInspect command-line tool for inspecting AI/ML models."
+description = "Model Inspect command-line tool for inspecting AI/ML models."
 authors = ["interwebshack <22042209+interwebshack@users.noreply.github.com>"]
 license = "MIT License"
 readme = "README.md"
-packages = [{ include = "modelinspect" }]
+packages = [{ include = "model_inspect" }]
 exclude = ["tests/*"]
 
 [tool.poetry.dependencies]
@@ -26,7 +26,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-modelinspect = "modelinspect.cli:cli"
+modelinspect = "model_inspect.cli:main"
 
 [tool.black]
 line-length = 100
