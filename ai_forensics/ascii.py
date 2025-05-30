@@ -24,16 +24,16 @@ class AsciiArtDisplayer:
         Displays ASCII art within a styled Rich panel.
         """
         art: str = r"""
-     __  __           _      _   _____                           _
-    |  \/  |         | |    | | |_   _|                         | |
-    | \  / | ___   __| | ___| |   | |  _ __  ___ _ __   ___  ___| |_
-    | |\/| |/ _ \ / _` |/ _ \ |   | | | '_ \/ __| '_ \ / _ \/ __| __|
-    | |  | | (_) | (_| |  __/ |  _| |_| | | \__ \ |_) |  __/ (__| |_
-    |_|  |_|\___/ \__,_|\___|_| |_____|_| |_|___/ .__/ \___|\___|\__|
-                                                | |
-                                                |_|
+              _____   ______                       _
+        /\   |_   _| |  ____|                     (_)
+       /  \    | |   | |__ ___  _ __ ___ _ __  ___ _  ___ ___
+      / /\ \   | |   |  __/ _ \| '__/ _ \ '_ \/ __| |/ __/ __|
+     / ____ \ _| |_  | | | (_) | | |  __/ | | \__ \ | (__\__ \
+    /_/    \_\_____| |_|  \___/|_|  \___|_| |_|___/_|\___|___/
+
+
         """
         panel: Panel = Panel.fit(
-            art, title="Welcome", subtitle="Inspect Ai Models", border_style="bold green"
+            art, title=None, subtitle="Inspect Ai Models", border_style="bold green"
         )
         self.console.print(panel)
