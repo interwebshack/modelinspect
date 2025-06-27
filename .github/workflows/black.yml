@@ -14,5 +14,5 @@ jobs:
       - uses: psf/black@stable
         with:
           options: "--check --verbose"
-          src: "./modelinspect"
+          src: "./ai_forensics"
           version: "24.10.0"
