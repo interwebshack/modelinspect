@@ -1,4 +1,4 @@
-![AI Forensics Banner](/images/AI_Forensics.png)
+![AI Forensics Banner](https://raw.githubusercontent.com/interwebshack/aiforensics/main/images/AI_Forensics.png)
 
 # AI Forensics  
 Command-line tool for inspecting AI/ML models.
