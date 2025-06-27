@@ -15,4 +15,4 @@ jobs:
         with:
           options: "--check --verbose"
           src: "./ai_forensics"
-          version: "24.10.0"
+          version: "25.1.0"
