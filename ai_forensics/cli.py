@@ -4,7 +4,7 @@ cli.py
 Main entry point for running the ASCII art display from the terminal.
 """
 
-from model_inspect.ascii import AsciiArtDisplayer
+from ai_forensics.ascii import AsciiArtDisplayer
 
 
 def main() -> None:
