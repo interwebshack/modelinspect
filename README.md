@@ -14,13 +14,20 @@ Command-line tool for inspecting AI/ML models.
 
 ```shell
 aiforensics/
-├── images/                        # 📁 Project-related images
-│   └── AI_Forensics.png           # Project image/logo
-├── ai_forensics/                 # 📁 Main source code package
+├── .github/                       # 📁 GitHub-specific configurations
+│   └── workflows/                 # 📁 CI/CD workflow definitions for GitHub Actions
+│       └── black.yaml             # 📄 GitHub Actions workflow for checking code formatting with Black
+├── ai_forensics/                  # 📁 Main source code package
 │   ├── __init__.py                # Initializes the package
 │   ├── __main__.py                # Enables `python -m ai_forensics` to run the CLI
 │   ├── ascii.py                   # Contains ASCII art display class using Rich
 │   └── cli.py                     # CLI entry point
+├── documentation/                 # 📁 Technical analysis and format-specific documentation
+│   ├── gguf_analysis.md           # 📄 In-depth analysis of the GGUF model format
+│   ├── onnx_analysis.md           # 📄 In-depth analysis of the ONNX (Open Neural Network Exchange) format
+│   ├── safetensor_analysis.md     # 📄 In-depth analysis of the SafeTensors format
+├── images/                        # 📁 Project-related images
+│   └── AI_Forensics.png           # Project image/logo
 ├── tests/                         # 📁 Test suite
 │   └── __init__.py                # Marks this directory as a Python package
 ├── .gitignore                     # 📄 Specifies intentionally untracked files to ignore in Git
