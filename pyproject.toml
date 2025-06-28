@@ -10,16 +10,20 @@ exclude = ["tests/*"]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-rich = "^14.0.0"
+rich = "14.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
-black = "^25.1.0"
-isort = "^6.0.1"
-mypy = "^1.15.0"
-pylint = "^3.3.7"
-pytest-cov = "^6.1.1"
-vulture = "^2.14"
+black = "25.1.0"
+isort = "6.0.1"
+mypy = "1.16.1"
+numpy = "2.2.6"
+pylint = "3.3.7"
+pytest-cov = "6.2.1"
+safetensors = "0.5.3"
+torch = "2.7.1"
+vulture = "2.14"
+
 
 [build-system]
 requires = ["poetry-core"]
