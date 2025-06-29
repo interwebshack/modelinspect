@@ -23,6 +23,8 @@ Types of Changes
 - Draft documentation for GGUF Analysis.  
 - Draft documentation for ONNX Analysis.  
 - Draft documentation for Safetensor Analysis.  
+- Draft CONTRIBUTING.md file.  
+- Draft SECURITY.md file.  
 - CHANGELOG.md file.  
 
 ### Changed  
