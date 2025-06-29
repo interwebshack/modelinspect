@@ -1,6 +1,17 @@
-# Reporting Security Issues
+# Security Issues
 
 The AI Forensics team and community take security bugs in `aiforensics` seriously. We appreciate your efforts to responsibly disclose your findings, and will make every effort to acknowledge your contributions.
+
+## Supported Versions
+
+Currently we are only supporting the following versions:
+
+| Version | Supported          |
+| ------- | ------------------ |
+| 1.0.x   | ✅                 |
+| < 1.0   | ❌                 |
+
+## Reporting Security Issues  
 
 To report a security issue, please use the GitHub Security Advisory ["Report a Vulnerability"](https://github.com/interwebshack/aiforensics/security/advisories/new) tab.
 
