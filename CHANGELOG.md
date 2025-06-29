@@ -18,9 +18,14 @@ Types of Changes
 
 ### Added
 
-- CHANGELOG.md file
-- 
-- 
-- 
-- 
-- 
+- Safetensor file parsing support.  
+- Unit test for Safetensor test file generation.  
+- Draft documentation for GGUF Analysis.  
+- Draft documentation for ONNX Analysis.  
+- Draft documentation for Safetensor Analysis.  
+- CHANGELOG.md file.  
+
+### Changed  
+
+- Add Supported Model Formats section to README.  
+- Make dependencies fixed versions for OpenSSF.  
