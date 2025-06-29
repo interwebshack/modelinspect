@@ -8,6 +8,19 @@
 https://github.com/executablebooks/.github/blob/master/CONTRIBUTING.md
 -->
 
+<!-- 
+Possible additions to the Guidelines
+- Follow PEP8 + Google-style docstrings
+- All code must be Python 3.10+ compatible - This will be covered by the current supported versions of Python.
+- Type hints and rich CLI formatting are required
+- PRs must pass:
+  - Unit tests
+  - pylint or ruff linting
+  - Static analysis (via CodeQL)
+  - Signed commits are strongly encouraged (git commit -S)
+  - Include test cases for any new functionality
+-->
+
 # Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue,
