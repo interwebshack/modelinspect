@@ -3,11 +3,11 @@
 # AI Forensics  
 Command-line tool for inspecting AI/ML models.
 
-|          |                                                                                                    |
-|----------|----------------------------------------------------------------------------------------------------|
-| Testing  | [![black](https://github.com/interwebshack/ai-forensics/actions/workflows/black.yml/badge.svg)](https://github.com/interwebshack/ai-forensics/actions/workflows/black.yml) |
-| Meta     | [![License: Apache 2.0](https://img.shields.io/crates/l/apa)](https://opensource.org/license/mit/) |
-|          |                                                                                                    |
+|           |                                                                                                    |
+|-----------|----------------------------------------------------------------------------------------------------|
+| Testing   | [![black](https://github.com/interwebshack/ai-forensics/actions/workflows/black.yml/badge.svg)](https://github.com/interwebshack/ai-forensics/actions/workflows/black.yml) |
+| License   | [![License: Apache 2.0](https://img.shields.io/crates/l/apa)](https://opensource.org/license/mit/) |
+| SonarQube | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=interwebshack_ai-forensics&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics) |
   
 ## Supported Model Formats
 
