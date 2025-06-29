@@ -25,6 +25,7 @@ Types of Changes
 - Draft documentation for Safetensor Analysis.  
 - Draft CONTRIBUTING.md file.  
 - Draft SECURITY-IMPLEMENTATION.md file.  
+- Setup Github Action for SonarQube Scanning.
 - SECURITY.md file.  
 - CHANGELOG.md file.  
 
