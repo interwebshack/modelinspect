@@ -24,6 +24,7 @@ Types of Changes
 - Draft documentation for ONNX Analysis.  
 - Draft documentation for Safetensor Analysis.  
 - Draft CONTRIBUTING.md file.  
+- Draft SECURITY-IMPLEMENTATION.md file.  
 - SECURITY.md file.  
 - CHANGELOG.md file.  
 
