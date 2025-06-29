@@ -1,6 +1,6 @@
 """
 Generates .safetensors files containing NumPy arrays with varied shapes
-for use in testing shape handling in downstream tools like aiforensics.
+for use in testing shape handling in downstream tools like `ai-forensics`.
 
 This module is intended to create a suite of test files that include:
     - Standard 1D and 2D shapes

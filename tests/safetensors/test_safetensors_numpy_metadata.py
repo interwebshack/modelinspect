@@ -1,6 +1,6 @@
 """
 Generates a .safetensors file containing NumPy array metadata
-for testing metadata extraction and validation in downstream tools like aiforensics.
+for testing metadata extraction and validation in downstream tools like `ai-forensics`.
 
 This test ensures that a .safetensors file can include arbitrary metadata
 and be successfully saved for later analysis.

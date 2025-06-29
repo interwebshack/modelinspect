@@ -1,6 +1,6 @@
 """
 Generates .safetensors files containing PyTorch tensors of various supported dtypes
-to test downstream handling of data types in tools like aiforensics.
+to test downstream handling of data types in tools like `ai-forensics`.
 
 This module produces one file per supported dtype. Each file contains a 2x2 tensor
 of ones, serialized in SafeTensors format. These files are intended for validating

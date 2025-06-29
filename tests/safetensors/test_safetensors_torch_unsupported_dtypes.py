@@ -1,6 +1,6 @@
 """
 Tests for generating deliberately malformed .safetensors files with unsupported dtypes
-for use in testing the robustness of the aiforensics tool.
+for use in testing the robustness of the `ai-forensics` tool.
 
 This module creates valid safetensors files using PyTorch and then corrupts the header
 to simulate unsupported or invalid dtypes (e.g., complex numbers, non-standard types).
@@ -27,7 +27,7 @@ def test_generate_torch_corrupted_dtype_file() -> None:
         3. Replaces the dtype in the header with an unsupported value ('complex64').
         4. Rewrites the file with the tampered header.
 
-    This file can then be used to test how the aiforensics tool handles invalid metadata.
+    This file can then be used to test how the `ai-forensics` tool handles invalid metadata.
 
     Raises:
         IOError: If there are issues reading or writing the file.

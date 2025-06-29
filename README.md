@@ -1,11 +1,11 @@
-![AI Forensics Banner](https://raw.githubusercontent.com/interwebshack/aiforensics/main/images/AI_Forensics.png)
+![AI Forensics Banner](https://raw.githubusercontent.com/interwebshack/ai-forensics/main/images/AI_Forensics.png)
 
 # AI Forensics  
 Command-line tool for inspecting AI/ML models.
 
 |          |                                                                                                    |
 |----------|----------------------------------------------------------------------------------------------------|
-| Testing  | [![black](https://github.com/interwebshack/aiforensics/actions/workflows/black.yml/badge.svg)](https://github.com/interwebshack/aiforensics/actions/workflows/black.yml) |
+| Testing  | [![black](https://github.com/interwebshack/ai-forensics/actions/workflows/black.yml/badge.svg)](https://github.com/interwebshack/ai-forensics/actions/workflows/black.yml) |
 | Meta     | [![License: Apache 2.0](https://img.shields.io/crates/l/apa)](https://opensource.org/license/mit/) |
 |          |                                                                                                    |
   
@@ -13,7 +13,7 @@ Command-line tool for inspecting AI/ML models.
 
 | Format          | Status       | Supported Versions  | Description |
 |-----------------|--------------|---------------------|-------------|
-| **SafeTensors** | ✅ Supported | `≤ v0.5.3`          | Provides safe, zero-copy loading of AI model weights. `aiforensics` can inspect and report metadata, tensor structure, and potential risks within `.safetensors` files. Version `≥ v0.5.3` is recommended due to a precision metadata fix. |
+| **SafeTensors** | ✅ Supported | `≤ v0.5.3`          | Provides safe, zero-copy loading of AI model weights. `ai-forensics` can inspect and report metadata, tensor structure, and potential risks within `.safetensors` files. Version `≥ v0.5.3` is recommended due to a precision metadata fix. |
 | **ONNX**        | 🚧 Planned   | _Not yet supported_ | Open Neural Network Exchange format. Planned for future releases to enable inspection of cross-framework models. |
 | **GGUF**        | 🚧 Planned   | _Not yet supported_ | Format used by `llama.cpp` for quantized models. Support is planned to help with auditing local LLM deployments. |
 
@@ -21,7 +21,7 @@ Command-line tool for inspecting AI/ML models.
 ## Project Structure
 
 ```shell
-aiforensics/
+ai-forensics/
 ├── .github/                       # 📁 GitHub-specific configurations
 │   └── workflows/                 # 📁 CI/CD workflow definitions for GitHub Actions
 │       └── black.yaml             # 📄 GitHub Actions workflow for checking code formatting with Black
@@ -49,7 +49,7 @@ aiforensics/
 ```
 ## Limitations & Alternatives
 
-`aiforensics` is currently under development.  More to come in future versions.  
+`ai-forensics` is currently under development.  More to come in future versions.  
 
 
 ## License

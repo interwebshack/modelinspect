@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "aiforensics"
+name = "ai-forensics"
 version = "0.0.0"
 description = "Command-line tool for inspecting AI/ML models."
 authors = ["interwebshack <22042209+interwebshack@users.noreply.github.com>"]

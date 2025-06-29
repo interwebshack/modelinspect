@@ -1,6 +1,6 @@
 """
 Generates .safetensors files containing NumPy arrays with various supported dtypes
-for use in testing how tools like aiforensics handle different data types.
+for use in testing how tools like `ai-forensics` handle different data types.
 
 Each test case creates a tensor of shape (2, 3) filled with ones, using a specific
 supported NumPy dtype. The output files are saved in the 'output/numpy_dtypes'
