@@ -20,9 +20,9 @@ Types of Changes
 
 - Safetensor file parsing support.  
 - Unit test for Safetensor test file generation.  
+- Documentation for Safetensor Analysis.  
 - Draft documentation for GGUF Analysis.  
 - Draft documentation for ONNX Analysis.  
-- Draft documentation for Safetensor Analysis.  
 - Draft CONTRIBUTING.md file.  
 - Draft SECURITY-IMPLEMENTATION.md file.  
 - Setup Github Action for SonarQube Scanning.

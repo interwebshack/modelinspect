@@ -1,0 +1,97 @@
+1. I need to update the SonarQube Scan from Automatic to GitHub Action so I can include Pytest Coverage
+https://docs.sonarsource.com/sonarqube-cloud/enriching/test-coverage/python-test-coverage/
+
+- I need to create a GitHub Repo which contains all the tools I use for release instead of having them in this repo.
+
+2. Build Container
+3. Add Cosign Signing
+4. Add Trivy Scanning
+5. Add Grype Scanning
+
+6. /keys/cosign.pub – Public Key File
+   🔐 To generate your Cosign keypair (once):
+   cosign generate-key-pair
+   # Outputs cosign.key (private) and cosign.pub (public)
+   Then:
+      Store cosign.key securely and add contents to COSIGN_PRIVATE_KEY secret
+      Add cosign.pub to your repo under keys/cosign.pub
+
+7 Release
+
+### 🧭 How to Use
+
+1. Place this file at:  
+   `./.github/RELEASE_TEMPLATE.md`
+
+2. When drafting a new GitHub release, **copy-paste the rendered version** into the description.
+
+3. Attach the release artifacts (from CI) manually or automate with [`gh release upload`](https://cli.github.com/manual/gh_release_upload).
+
+release-v1.2.0.tar.gz
+release-v1.2.0.tar.gz.sig
+release/                     # Temp folder (not checked in)
+├── sbom.cyclonedx.json
+├── sbom.spdx.json
+├── release.md
+├── release.html
+├── release.html.asc
+├── manifest.yaml           # Canonical metadata (generated)
+├── index.yaml              # Optional (generated if needed)
+├── signature-verify.log    # Output of `cosign verify`
+└── image-signature.txt     # Cosign output digest
+
+8. Figure out what this means
+Friendly for slsa, sbom, cosign, and in-toto pipelines
+
+
+9. Figure out how to do this - Release Artifacts
+- secure your GitHub Actions workflows properly
+- For highest assurance, you must verify that the generated artifacts match the committed source via a reproducibility process
+
+Because artifacts aren’t pre-generated and committed, anyone reproducing a release locally must:
+Check out the exact tag
+Re-run the release generation workflow (e.g. via a Makefile or CLI tool)
+Verify that the regenerated SBOMs, manifests, and signatures match those on the GitHub release
+
+🔁 Release Notes Regeneration is Non-Deterministic
+What it means:
+If release.md or manifest.yaml is CI-generated only, they may differ slightly if re-run (e.g., date, build hash, order of SBOM keys).
+Implications:
+You must ensure stable, deterministic artifact generation if you later re-sign or verify
+Without storing the generated versions in Git, you lose easy reference to “exactly what was signed”
+
+🧠 Summary Table
+| Concern                          | Trade-Off Summary                                  |
+| -------------------------------- | -------------------------------------------------- |
+| Git-based provenance             | ❌ Not preserved — metadata lives in CI only        |
+| CI trust model                   | 🔐 You must fully trust and secure your CI runners |
+| Reproducibility                  | 🧪 Requires explicit tooling and discipline        |
+| Auditable diffs between releases | ❌ Not directly supported without historical copies |
+| Simplicity of releases           | ✅ Very clean if no long-term audit is required     |
+
+✅ When Is This Still a Good Design?
+This approach is ideal when:
+You care about clean repos and want Git to track only source, not output
+You use Cosign/in-toto to enforce artifact signing and trust boundaries
+Your team or users can verify artifacts using published manifests + public keys
+You back up GitHub Releases (or use GitHub Enterprise with long artifact retention)
+You prioritize automation and clarity over manual snapshotting
+
+🔧 Optional Mitigations
+If these disadvantages are concerns, you could:
+
+✅ Automatically copy signed artifacts to an immutable blob store (e.g. S3, Artifactory)
+✅ Archive release/ to a separate branch (release-metadata) if Git tracking is desired
+✅ Add a "verify & reproduce" tool that guarantees equivalence from source
+✅ Integrate Sigstore’s Rekor transparency log for public artifact notarization
+
+🔁 Hybrid Release Flow for AI Forensics
+
+| Layer                                 | Purpose                                                                      |
+| ------------------------------------- | ---------------------------------------------------------------------------- |
+| 🧪 **CI-generated `release/` folder** | Bundled artifacts: SBOMs, signature logs, `manifest.yaml`, `release.md/html` |
+| 📦 **GitHub Release attachments**     | Public-facing signed bundle for traceability                                 |
+| 🔐 **Git `release-metadata` branch**  | Version-controlled snapshot of each release’s metadata                       |
+| ☁️ **S3 immutable storage**           | Long-term, secure offsite archive of signed artifacts                        |
+| 🧪 **Verification CLI**               | Offline validation of downloaded bundles (`manifest.yaml` enforced)          |
+

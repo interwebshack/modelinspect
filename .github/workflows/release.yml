@@ -1,0 +1,228 @@
+# Assumes you have:
+# * Cosign keypair stored in GitHub Secrets (COSIGN_PRIVATE_KEY, COSIGN_PASSWORD)
+#   * COSIGN_PRIVATE_KEY	The contents of your cosign.key file
+#   * COSIGN_PASSWORD	The password used to encrypt your private key
+# * cosign.pub publicly available (optional if verifying elsewhere)
+
+# ****************************************************************************************************
+# Notes for further development - Delete after we get this working
+# ****************************************************************************************************
+# Prerequisites
+# Ensure the following artifacts are generated and uploaded in release.yml:
+# release.md
+# release.html
+# release.html.asc
+# sbom.cyclonedx.json
+# sbom.spdx.json
+#
+# You do not need any new secrets. GH_TOKEN (provided by GitHub) has permissions to create releases.
+# name: Release Build
+
+# Beginning of the release workslow
+
+# on:
+#   push:
+#     tags:
+#       - 'v*'  # Matches tags like v1.0.0, v2.1.3, etc.
+
+jobs:
+  release:
+    name: Build, Push, and Sign Release Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract tag
+        id: extract_tag
+        run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/interwebshack/ai-forensics:${{ steps.extract_tag.outputs.TAG }}
+            ghcr.io/interwebshack/ai-forensics:latest
+
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ghcr.io/interwebshack/ai-forensics:latest
+          format: table
+          exit-code: 1
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign image with Cosign
+        run: |
+          echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
+          export COSIGN_PASSWORD="${{ secrets.COSIGN_PASSWORD }}"
+          cosign sign --key cosign.key ghcr.io/interwebshack/ai-forensics:${{ steps.extract_tag.outputs.TAG }}
+          cosign sign --key cosign.key ghcr.io/interwebshack/ai-forensics:latest
+
+      - name: Generate Release Summary
+        run: |
+          mkdir -p release-artifacts
+          TAG=${GITHUB_REF##*/}
+          echo "# AI Forensics Release $TAG" > release-artifacts/release.md
+          echo "" >> release-artifacts/release.md
+          echo "- Container: ghcr.io/interwebshack/ai-forensics:$TAG" >> release-artifacts/release.md
+          echo "- Signed with Cosign ✅" >> release-artifacts/release.md
+          echo "- Coverage: [Link to SonarCloud report](https://sonarcloud.io/dashboard?id=interwebshack_ai-forensics)" >> release-artifacts/release.md
+          echo "- Quality Gate: [Badge](https://sonarcloud.io/api/project_badges/measure?project=interwebshack_ai-forensics&metric=alert_status)" >> release-artifacts/release.md
+          echo "- Signature Verification: \`cosign verify --key cosign.pub ghcr.io/interwebshack/ai-forensics:$TAG\`" >> release-artifacts/release.md
+          
+
+      - name: Upload Release Summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-summary
+          path: release-artifacts/release.md
+
+      # You can later render this as HTML or convert it using pandoc in a follow-up CI step.
+      # - name: Convert Markdown to Signed HTML
+      #   run: |
+      #     pandoc release-artifacts/release.md -o release-artifacts/release.html
+      #     gpg --output release-artifacts/release.html.asc --armor --sign release-artifacts/release.html
+      # Upload both files as GitHub release artifacts or attach them manually.
+
+      # These hashes will now be embedded at the bottom of release.md and included in the final GitHub Release.
+      - name: Compute SBOM hashes
+        run: |
+          mkdir -p release-artifacts
+          echo "## 📄 SBOM Hashes" >> release-artifacts/release.md
+          for file in sbom.*.json; do
+            sha256sum $file >> release-artifacts/release.md
+            cp $file release-artifacts/
+          done
+
+      #🔹 Artifact Generation Steps
+      #🔸 SBOM Hash + Metadata
+      - name: Generate manifest.yaml
+        run: |
+          mkdir -p release
+          echo "version: ${GITHUB_REF##*/}" > release/manifest.yaml
+          echo "release_date: $(date +%F)" >> release/manifest.yaml
+          echo "image:" >> release/manifest.yaml
+          echo "  name: ghcr.io/interwebshack/ai-forensics:${GITHUB_REF##*/}" >> release/manifest.yaml
+
+          for f in sbom.*.json; do
+            HASH=$(sha256sum $f | awk '{print $1}')
+            echo "  $f: $HASH" >> release/manifest.yaml
+            cp $f release/
+          done
+
+      #🔸 Cosign Output
+      - name: Sign container image with Cosign
+        run: |
+          echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
+          export COSIGN_PASSWORD="${{ secrets.COSIGN_PASSWORD }}"
+          cosign sign --key cosign.key ghcr.io/interwebshack/ai-forensics:${GITHUB_REF##*/} | tee release/image-signature.txt
+
+      #🔸 Verify Signature (Optional Inline)
+      - name: Verify image signature and capture log
+        run: |
+          cosign verify --key cosign.key ghcr.io/interwebshack/ai-forensics:${GITHUB_REF##*/} | tee release/signature-verify.log
+
+      #🔹 Bundle for Upload to GitHub Release
+      # Add to publish-release.yml or end of release.yml:
+      - name: Upload bundled release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-bundle
+          path: release/
+
+
+      # 🔁 Hybrid Release Flow for AI Forensics
+      #
+      # | Layer                                 | Purpose                                                                      |
+      # | ------------------------------------- | ---------------------------------------------------------------------------- |
+      # | 🧪 **CI-generated `release/` folder** | Bundled artifacts: SBOMs, signature logs, `manifest.yaml`, `release.md/html` |
+      # | 📦 **GitHub Release attachments**     | Public-facing signed bundle for traceability                                 |
+      # | 🔐 **Git `release-metadata` branch**  | Version-controlled snapshot of each release’s metadata                       |
+      # | ☁️ **S3 immutable storage**           | Long-term, secure offsite archive of signed artifacts                        |
+      # | 🧪 **Verification CLI**               | Offline validation of downloaded bundles (`manifest.yaml` enforced)          |
+
+      - name: Archive release to Git branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan release-metadata
+          git rm -rf .
+          mkdir -p releases/${GITHUB_REF##*/}
+          cp -r release/* releases/${GITHUB_REF##*/}
+          git add releases/
+          git commit -m "Add metadata for ${GITHUB_REF##*/}"
+          git push origin release-metadata
+      # You’ll need to protect release-metadata in your repo settings.
+
+      #🔹 Upload Bundle to S3
+      # Add to release.yml (assumes you store your AWS credentials as GitHub Secrets):
+      - name: Upload bundle to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl private --follow-symlinks
+        env:
+          AWS_S3_BUCKET: ai-forensics-releases
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+          SOURCE_DIR: release
+          DEST_DIR: releases/${GITHUB_REF##*/}
+
+      #🔹 Create and sign release archive
+      # Assuming all artifacts are in the release/ folder:
+      # 🛡 Requires GPG_PRIVATE_KEY and GPG_PASSPHRASE secrets to be preloaded in the CI runner.
+      - name: Create and sign release archive
+        run: |
+          cd release
+          tar -czf ../release-${GITHUB_REF##*/}.tar.gz .
+          gpg --batch --yes --armor --detach-sign \
+            --output ../release-${GITHUB_REF##*/}.tar.gz.sig \
+            ../release-${GITHUB_REF##*/}.tar.gz
+
+      # I do not understand this part
+      # 🔐 2. Import GPG Key from Secret
+      # Add before signing:
+      - name: Import GPG key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          echo "use-agent" >> ~/.gnupg/gpg.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          echo RELOADAGENT | gpg-connect-agent
+      # 🔐 Generate a GPG key for your project, then export it with:
+      # gpg --armor --export-secret-keys YOUR_KEY_ID > gpg.key
+
+      - name: Export image layers for comparison
+        run: |
+          docker pull ghcr.io/interwebshack/ai-forensics:${GITHUB_REF##*/}
+          docker inspect ghcr.io/interwebshack/ai-forensics:${GITHUB_REF##*/} \
+            --format '{{json .RootFS.Layers}}' > release/image-layers.json
+
+      # The order of all this is wrong - I need to go back and refactor this release workflow.
+      # Plus I still need to setup the Dockerhub account
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Tag and push DockerHub image
+        run: |
+          docker tag ghcr.io/yourgithubuser/ai-forensics:${GITHUB_REF##*/} yourdockerhubuser/ai-forensics:${GITHUB_REF##*/}
+          docker push yourdockerhubuser/ai-forensics:${GITHUB_REF##*/}

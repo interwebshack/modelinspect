@@ -1,0 +1,77 @@
+name: Publish GitHub Release
+
+# on:
+#   workflow_run:
+#     workflows: ["Release Build + Sign"]
+#     types: [completed]
+
+jobs:
+  publish:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # needed to fetch tags
+
+      - name: Set up Git
+        run: |
+          git fetch --tags
+          echo "VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: Install GitHub CLI
+        uses: cli/gh-action@v2
+
+      - name: Create GitHub Release with Template
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RELEASE_BODY=$(cat .github/RELEASE_TEMPLATE.md | sed "s/vX.Y.Z/$VERSION/g")
+          gh release create "$VERSION" \
+            --title "AI Forensics $VERSION" \
+            --notes "$RELEASE_BODY" \
+            artifacts/release-artifacts/release.md \
+            artifacts/release-artifacts/release.html \
+            artifacts/release-artifacts/release.html.asc \
+            artifacts/release-artifacts/sbom.cyclonedx.json \
+            artifacts/release-artifacts/sbom.spdx.json
+
+      - name: Validate release.md syntax
+        run: |
+          grep -q "# AI Forensics" artifacts/release-artifacts/release.md || (echo "Missing title" && exit 1)
+          grep -q "Cosign" artifacts/release-artifacts/release.md || (echo "Missing signature section" && exit 1)
+
+      - name: Lint markdown
+        run: |
+          npm install -g markdownlint-cli
+          markdownlint artifacts/release-artifacts/release.md
+
+      #🔹 Attach to GitHub Release
+      # Update the gh release create block in publish-release.yml:
+      # You can include additional .zip or .tar.gz packaging here too if needed.
+      - name: Upload bundled artifacts to GitHub Release
+        run: |
+          gh release upload "${{ env.VERSION }}" \
+            release/release.md \
+            release/release.html \
+            release/release.html.asc \
+            release/sbom.cyclonedx.json \
+            release/sbom.spdx.json \
+            release/manifest.yaml \
+            release/image-signature.txt \
+            release/signature-verify.log
+
+      # 📎 3. Upload .tar.gz + .sig to GitHub Release
+      - name: Upload release archive and signature
+        run: |
+          gh release upload "$VERSION" \
+            release-${VERSION}.tar.gz \
+            release-${VERSION}.tar.gz.sig

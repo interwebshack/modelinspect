@@ -48,3 +48,27 @@ We prefer all communications to be in English.
 - Container images are scanned with Trivy and Grype during CI
 
 For implementation details, see [SECURITY-IMPLEMENTATION.md](./docs/security/SECURITY-IMPLEMENTATION.md).
+
+## 🔐 Digital Signature Policy
+
+All release container images published to GHCR are signed using [Cosign](https://docs.sigstore.dev/cosign/).  
+
+To verify a signature:
+
+```bash
+cosign verify --key cosign.pub ghcr.io/interwebshack/ai-forensics:v1.0.0
+```
+You can retrieve the public verification key here:
+* `/keys/cosign.pub`
+* [View Raw](https://raw.githubusercontent.com/interwebshack/ai-forensics/main/keys/cosign.pub)
+
+**🔏 Public Key Fingerprint (SHA-256)**
+```bash
+7f:53:ae:96:3e:12:9d:45:8c:fa:4a:e1:91:fe:91:0a:e8:bc:af:f9:... (truncated)
+```
+We rotate keys annually. Previous public keys and verification history are archived in `/keys/`.
+To generate the fingerprint:
+
+```bash
+openssl dgst -sha256 cosign.pub
+```

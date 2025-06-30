@@ -1,0 +1,29 @@
+name: Verify Image Signature
+
+# on:
+#   workflow_run:
+#     workflows: ["Release Build + Sign"]
+#     types:
+#       - completed
+
+jobs:
+  verify:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    name: Verify Cosign Signature
+
+    steps:
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Download public key
+        run: |
+          curl -o cosign.pub https://raw.githubusercontent.com/interwebshack/ai-forensics/main/keys/cosign.pub
+
+      - name: Extract tag
+        id: extract_tag
+        run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+
+      - name: Verify Cosign Signature
+        run: |
+          cosign verify --key cosign.pub ghcr.io/interwebshack/ai-forensics:${{ steps.extract_tag.outputs.TAG }}
