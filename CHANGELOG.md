@@ -28,6 +28,7 @@ Types of Changes
 - Setup Github Action for SonarQube Scanning.
 - SECURITY.md file.  
 - CHANGELOG.md file.  
+- CONTAINER.md file.
 - ROADMAP.md file.  
 
 ### Changed  
