@@ -1,0 +1,12 @@
+# .github/workflows/test-dispatch.yml
+name: Manual Test Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say hello
+        run: echo "Workflow ran successfully!"
