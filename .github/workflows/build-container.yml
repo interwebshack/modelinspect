@@ -4,7 +4,7 @@ name: Build Secure Container
 on:
   push:
   #  branches: [main]
-  branches: [never]
+    branches: [never]
   pull_request:
   workflow_dispatch:  # Optional manual trigger
 
