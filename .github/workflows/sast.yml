@@ -1,0 +1,22 @@
+name: Static Code Security
+
+on:
+  push:
+    #  branches: [main]
+    branches: [never]
+  pull_request:
+    #  branches: [main]
+    branches: [never]
+
+jobs:
+  sast:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Bandit
+        run: pip install bandit
+
+      - name: Run Bandit SAST
+        run: bandit -r ai_forensics -lll
