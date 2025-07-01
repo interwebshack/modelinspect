@@ -15,6 +15,8 @@ name: OpenSSF Scorecard
 
 # Trigger the workflow on a weekly schedule and on manual dispatch
 on:
+  push:
+  pull_request:
   schedule:
     - cron: '0 0 * * 0'  # Every Sunday at 00:00 UTC
   workflow_dispatch:
