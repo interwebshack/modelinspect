@@ -28,7 +28,6 @@ on:
     - cron: '39 4 * * 6'
   push:
     # branches: [ "main" ]
-    branches: [ "*" ]
 
 # Declare default permissions as read only.
 permissions: read-all
