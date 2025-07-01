@@ -1,0 +1,54 @@
+# -----------------------------------------------------------------------------------
+# GitHub Actions Workflow: OpenSSF Scorecard
+#
+# This workflow runs the OpenSSF Scorecard analysis on this repository:
+# - Executes weekly (every Sunday at 00:00 UTC) and allows manual runs
+# - Evaluates repository security best practices using Scorecard
+# - Uploads results to GitHub's Security tab in SARIF format
+# - Optionally stores the SARIF report as a downloadable artifact
+#
+# References:
+# https://github.com/ossf/scorecard
+# -----------------------------------------------------------------------------------
+
+name: OpenSSF Scorecard
+
+# Trigger the workflow on a weekly schedule and on manual dispatch
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Every Sunday at 00:00 UTC
+  workflow_dispatch:
+
+# Limit the permissions to read-only for contents (secure default)
+permissions:
+  contents: read
+
+jobs:
+  run-scorecard:
+    name: Run OpenSSF Scorecard
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Run the OpenSSF Scorecard action
+      - name: Execute Scorecard analysis
+        uses: ossf/scorecard-action@v2
+        with:
+          results_file: results.sarif      # Output file for results
+          results_format: sarif            # SARIF format for GitHub Security integration
+
+      # Step 3: Upload the SARIF report to GitHub's Security tab
+      - name: Upload SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: results.sarif
+
+      # Step 4: (Optional) Upload SARIF file as an artifact for download or audit
+      - name: Save SARIF report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: scorecard-results
+          path: results.sarif
