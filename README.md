@@ -27,7 +27,7 @@ Command-line tool for inspecting AI/ML models.
 [maintainability_link]: https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics
 [container]: https://github.com/interwebshack/ai-forensics/actions/workflows/build-container.yml/badge.svg
 [release]: https://github.com/interwebshack/ai-forensics/actions/workflows/release.yml/badge.svg
-[release_verified]: https://github.com/yourgithubuser/ai-forensics/actions/workflows/verify-release.yml
+[release_verified]: https://github.com/interwebshack/ai-forensics/actions/workflows/verify-release.yml/badge.svg
 
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=interwebshack_ai-forensics&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics)
 
