@@ -3,19 +3,33 @@
 # AI Forensics  
 Command-line tool for inspecting AI/ML models.
 
-|                   |                                                                                                    |
-|-------------------|----------------------------------------------------------------------------------------------------|
-| License           | [![License: Apache 2.0](https://img.shields.io/crates/l/apa)](https://opensource.org/license/mit/) |
-| Black Formatter   | [![black](https://github.com/interwebshack/ai-forensics/actions/workflows/black.yml/badge.svg)](https://github.com/interwebshack/ai-forensics/actions/workflows/black.yml) |
-| Tests (main)      | ![Tests](https://github.com/interwebshack/ai-forensics/actions/workflows/test.yml/badge.svg) |
-| Matrix Tests      | ![Matrix](https://github.com/interwebshack/ai-forensics/actions/workflows/test-matrix.yml/badge.svg) |
-| SonarCloud        | [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=interwebshack_ai-forensics&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics) |
-| Coverage          | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=interwebshack_ai-forensics&metric=coverage)](https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics) |
-| Maintainability   | [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=interwebshack_ai-forensics&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics) |
-| Container Build   | ![Container](https://github.com/interwebshack/ai-forensics/actions/workflows/build-container.yml/badge.svg) |
-| Release & Signing | ![Release](https://github.com/interwebshack/ai-forensics/actions/workflows/release.yml/badge.svg) |
-| Release Verified  | [![Release Verified](https://github.com/interwebshack/ai-forensics/actions/workflows/verify-release.yml/badge.svg)](https://github.com/yourgithubuser/ai-forensics/actions/workflows/verify-release.yml) |
-  
+| Category          | Badge                                                                                       |
+|-------------------|---------------------------------------------------------------------------------------------|
+| License           | [![License: MIT]][license]                                                                  |
+| Black Formatter   | [![black]][black]                                                                           |
+| Tests (main)      | [![Tests]][tests]                                                                           |
+| Matrix Tests      | [![Matrix]][matrix]                                                                         |
+| SonarCloud        | [![Quality Gate]][quality_gate]                                                             |
+| CodeQL            | [![CodeQL Security Scan][codeql]                                                            |
+
+| Coverage          | [![Coverage]][coverage]                                                                     |
+| Maintainability   | [![Maintainability Rating]][maintainability]                                                |
+| Container Build   | [![Container]][container]                                                                   |
+| Release & Signing | [![Release]][release]                                                                       |
+| Release Verified  | [![Release Verified]][release_verified]                                                     |
+
+[license]: https://opensource.org/license/mit/
+[black]: https://github.com/interwebshack/ai-forensics/actions/workflows/black.yml/badge.svg
+[tests]: https://github.com/interwebshack/ai-forensics/actions/workflows/test.yml/badge.svg
+[matrix]: https://github.com/interwebshack/ai-forensics/actions/workflows/test-matrix.yml/badge.svg
+[quality_gate]: https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics
+[codeql]: https://github.com/interwebshack/ai-forensics/actions/workflows/codeql.yml/badge.svg
+[coverage]: https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics
+[maintainability]: https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics
+[container]: https://github.com/interwebshack/ai-forensics/actions/workflows/build-container.yml/badge.svg
+[release]: https://github.com/interwebshack/ai-forensics/actions/workflows/release.yml/badge.svg
+[release_verified]: https://github.com/yourgithubuser/ai-forensics/actions/workflows/verify-release.yml
+
 ## Supported Model Formats
 
 | Format          | Status       | Supported Versions  | Description |
