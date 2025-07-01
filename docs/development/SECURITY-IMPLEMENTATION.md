@@ -450,4 +450,3 @@ Here’s a complete breakdown of **GitHub workflows** you should implement for t
 | `tag-release.yml`     | `push` to `v*.*.*` tag  | Generate, sign, and upload integrity artifacts at release       |
 | `build-container.yml` | `push` to `main`, `tag` | Build and sign container image, verify at runtime               |
 | `cosign-verify.yml`   | `deployment`, `manual`  | Verify container/image signatures with Cosign before deployment |
-

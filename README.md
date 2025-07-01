@@ -1,6 +1,6 @@
 ![AI Forensics Banner](https://raw.githubusercontent.com/interwebshack/ai-forensics/main/images/AI_Forensics.png)
 
-# AI Forensics  
+# AI Forensics
 Command-line tool for inspecting AI/ML models.
 
 
@@ -37,7 +37,21 @@ Command-line tool for inspecting AI/ML models.
 | **ONNX**        | 🚧 Planned   | _Not yet supported_ | Open Neural Network Exchange format. Planned for future releases to enable inspection of cross-framework models. |
 | **GGUF**        | 🚧 Planned   | _Not yet supported_ | Format used by `llama.cpp` for quantized models. Support is planned to help with auditing local LLM deployments. |
 
-  
+---
+## 📚 Documentation
+
+| Category              | Link                                                |
+| --------------------- | --------------------------------------------------- |
+| 🛡 Security Design    | [SECURITY.md](SECURITY.md)                           |
+| 🔄 CI/CD Workflows    | [WORKFLOWS.md](./docs/development/WORKFLOWS.md)     |
+| 🧱 Container Design   | [CONTAINER.md](./docs/development/CONTAINER.md)     |
+| 🧬 Development Guide  | [DEVELOPMENT.md](./docs/development/DEVELOPMENT.md) |
+| 📜 Roadmap            | [ROADMAP.md](./docs/development/ROADMAP.md)         |
+| 🤝 Contribution Guide | [CONTRIBUTING.md](CONTRIBUTING.md)                  |
+
+
+---
+
 ## Project Structure
 
 ```shell
@@ -69,7 +83,7 @@ ai-forensics/
 ```
 ## Limitations & Alternatives
 
-`ai-forensics` is currently under development.  More to come in future versions.  
+`ai-forensics` is currently under development.  More to come in future versions.
 
 
 ## License
@@ -78,7 +92,12 @@ MIT (See [LICENSE](./LICENSE))
 
 ## Acknowledgements
 
-This project is heavily inspired by the following projects: 
-* [PickleScan](https://github.com/mmaitre314/picklescan)  
-* [ModelScan](https://github.com/protectai/modelscan)  
-* [Fickling](https://github.com/trailofbits/fickling)  
+This project is heavily inspired by the following projects:
+* [PickleScan](https://github.com/mmaitre314/picklescan)
+* [ModelScan](https://github.com/protectai/modelscan)
+* [Fickling](https://github.com/trailofbits/fickling)
+
+---
+
+## Other test files
+https://huggingface.co/serbdev/test/blob/main/test.safetensors

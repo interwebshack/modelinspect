@@ -1,20 +1,20 @@
 # SafeTensors File Format Analysis (AI Forensics)
 
-This document explains the structure of [Safetensors](https://github.com/huggingface/safetensors#safetensors) files and how **AI Forensics** safely inspects `.safetensors` files by analyzing metadata, verifying structure, and detecting potentially malicious or unsafe content — all without executing any model code.  
+This document explains the structure of [Safetensors](https://github.com/huggingface/safetensors#safetensors) files and how **AI Forensics** safely inspects `.safetensors` files by analyzing metadata, verifying structure, and detecting potentially malicious or unsafe content — all without executing any model code.
 
 ---
 
-## SafeTensors Format Overview  
+## SafeTensors Format Overview
 
 The `.safetensors` format is purpose-built for storing AI model weights in a **secure, efficient, and deterministic** way.  It was developed to address the security concerns around formats like `.pt` or `.pkl`, which can execute arbitrary Python code during loading — a serious attack surface in untrusted environments.
 
 **Key characteristics of SafeTensors:**
 
-* Stores tensors in a **simple binary format**  
-* Avoids using Python object serialization (like `pickle`)  
-* Guarantees **no code execution risk** during loading — making it safe for use in security-sensitive or forensic workflows  
+* Stores tensors in a **simple binary format**
+* Avoids using Python object serialization (like `pickle`)
+* Guarantees **no code execution risk** during loading — making it safe for use in security-sensitive or forensic workflows
 * Supports **zero-copy memory-mapping** for fast and efficient tensor access
-* Includes a **JSON-based header** containing metadata such as tensor names, shapes, and data types  
+* Includes a **JSON-based header** containing metadata such as tensor names, shapes, and data types
 
 ## 📦 SafeTensors File Layout
 

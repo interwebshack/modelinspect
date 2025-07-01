@@ -1,6 +1,6 @@
 # 🔖 AI Forensics vX.Y.Z Release Notes
 
-**Release Date:** YYYY-MM-DD  
+**Release Date:** YYYY-MM-DD
 **Git Tag:** `vX.Y.Z`
 
 ---
@@ -28,23 +28,23 @@ docker pull ghcr.io/interwebshack/ai-forensics:vX.Y.Z
 
 ## 🔐 Digital Signature
 
-This release is signed using [Cosign](https://docs.sigstore.dev/cosign/).  
-To verify:  
+This release is signed using [Cosign](https://docs.sigstore.dev/cosign/).
+To verify:
 ```bash
 cosign verify --key cosign.pub ghcr.io/interwebshack/ai-forensics:vX.Y.Z
 ```
 - 🔑 Public key: `[cosign.pub](https://raw.githubusercontent.com/interwebshack/ai-forensics/main/keys/cosign.pub)`
 - 🔒 Fingerprint: `SHA256: abcdef...`
 
-## 📈 Code Quality & Security  
+## 📈 Code Quality & Security
 
--  
--  
-Static analysis and quality gates are enforced by [SonarCloud](https://sonarcloud.io/).  
+-
+-
+Static analysis and quality gates are enforced by [SonarCloud](https://sonarcloud.io/).
 
 ## 🧾 SBOM and Metadata
 
-The following artifacts are published with this release:  
+The following artifacts are published with this release:
 
 | Artifact              | Description                            |
 | --------------------- | -------------------------------------- |
@@ -66,6 +66,6 @@ gpg --verify release.html.asc release.html
 
 ## 📚 Documentation
 
-- [Security Policy](./SECURITY.md)  
-- [Workflow Overview](./docs/development/WORKFLOWS.md)  
-- [Contribution Guide](./CONTRIBUTING.md)  
+- [Security Policy](./SECURITY.md)
+- [Workflow Overview](./docs/development/WORKFLOWS.md)
+- [Contribution Guide](./CONTRIBUTING.md)

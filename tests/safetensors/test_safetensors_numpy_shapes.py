@@ -8,7 +8,7 @@ This module is intended to create a suite of test files that include:
     - Higher-dimensional shapes
     - Large tensors
 
-Files are saved under the output/numpy_dtypes directory.
+Files are saved under the tests/models/numpy_dtypes directory.
 """
 
 import os
@@ -18,7 +18,7 @@ import numpy as np
 import pytest
 from safetensors.numpy import save_file
 
-OUTPUT_DIR = "output/safetensors_numpy"
+OUTPUT_DIR = "tests/models/safetensors_numpy"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 SHAPES = [(1,), (2, 2), (0, 5), (1, 1, 1), (1000, 1000)]

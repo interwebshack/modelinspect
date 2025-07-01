@@ -20,7 +20,7 @@ https://docs.sonarsource.com/sonarqube-cloud/enriching/test-coverage/python-test
 
 ### 🧭 How to Use
 
-1. Place this file at:  
+1. Place this file at:
    `./.github/RELEASE_TEMPLATE.md`
 
 2. When drafting a new GitHub release, **copy-paste the rendered version** into the description.
@@ -94,4 +94,3 @@ If these disadvantages are concerns, you could:
 | 🔐 **Git `release-metadata` branch**  | Version-controlled snapshot of each release’s metadata                       |
 | ☁️ **S3 immutable storage**           | Long-term, secure offsite archive of signed artifacts                        |
 | 🧪 **Verification CLI**               | Offline validation of downloaded bundles (`manifest.yaml` enforced)          |
-

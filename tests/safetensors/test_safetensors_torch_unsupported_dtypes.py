@@ -4,6 +4,9 @@ for use in testing the robustness of the `ai-forensics` tool.
 
 This module creates valid safetensors files using PyTorch and then corrupts the header
 to simulate unsupported or invalid dtypes (e.g., complex numbers, non-standard types).
+
+Output:
+    - File saved to tests/models/safetensors_torch directory.
 """
 
 import json
@@ -13,7 +16,7 @@ import struct
 import torch
 from safetensors.torch import save_file
 
-OUTPUT_DIR = "output/safetensors_torch"
+OUTPUT_DIR = "tests/models/safetensors_torch"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 

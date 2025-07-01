@@ -59,7 +59,7 @@ def check_layers_against_sbom(layers_file: Path, sbom_file: Path):
     print(f"🔍 Image has {len(layers)} layers")
     print(f"🧾 SBOM lists {len(sbom.get('packages', []))} packages")
     # In practice: compare known files or hashes
-    
+
 if __name__ == "__main__":
     release_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("release")
     manifest = release_dir / "manifest.yaml"
@@ -71,6 +71,6 @@ if __name__ == "__main__":
 
     if not verify_gpg_signature(release_dir.parent / f"release-{version}.tar.gz"):
     sys.exit(1)
-    
+
     if not all_passed:
         sys.exit(1)

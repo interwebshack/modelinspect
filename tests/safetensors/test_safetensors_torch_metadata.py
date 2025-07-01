@@ -10,7 +10,7 @@ The generated file includes:
     - Metadata such as versioning and source tags
 
 Output:
-    - File saved to output/safetensors_torch/torch_with_metadata.safetensors
+    - File saved to tests/models/safetensors_torch directory.
 """
 
 import os
@@ -19,7 +19,7 @@ from typing import Dict
 import torch
 from safetensors.torch import save_file
 
-OUTPUT_DIR = "output/safetensors_torch"
+OUTPUT_DIR = "tests/models/safetensors_torch"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 

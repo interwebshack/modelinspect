@@ -7,31 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Types of Changes
 
-- `Added` for new features.  
-- `Changed` for changes in existing functionality.  
-- `Deprecated` for soon-to-be removed features.  
-- `Removed` for now removed features.  
-- `Fixed` for any bug fixes.  
-- `Security` in case of vulnerabilities.  
+- `Added` for new features.
+- `Changed` for changes in existing functionality.
+- `Deprecated` for soon-to-be removed features.
+- `Removed` for now removed features.
+- `Fixed` for any bug fixes.
+- `Security` in case of vulnerabilities.
 
 ## [Unreleased]
 
 ### Added
 
-- Safetensor file parsing support.  
-- Unit test for Safetensor test file generation.  
-- Documentation for Safetensor Analysis.  
-- Draft documentation for GGUF Analysis.  
-- Draft documentation for ONNX Analysis.  
-- Draft CONTRIBUTING.md file.  
-- Draft SECURITY-IMPLEMENTATION.md file.  
+- Safetensor file parsing support.
+- Unit test for Safetensor test file generation.
+- Documentation for Safetensor Analysis.
+- Draft documentation for GGUF Analysis.
+- Draft documentation for ONNX Analysis.
+- Draft CONTRIBUTING.md file.
+- Draft SECURITY-IMPLEMENTATION.md file.
 - Setup Github Action for SonarQube Scanning.
-- SECURITY.md file.  
-- CHANGELOG.md file.  
+- SECURITY.md file.
+- CHANGELOG.md file.
 - CONTAINER.md file.
-- ROADMAP.md file.  
+- ROADMAP.md file.
 
-### Changed  
+### Changed
 
-- Add Supported Model Formats section to README.  
-- Make dependencies fixed versions for OpenSSF.  
+- Add Supported Model Formats section to README.
+- Make dependencies fixed versions for OpenSSF.

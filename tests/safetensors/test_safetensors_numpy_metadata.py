@@ -10,7 +10,7 @@ The generated file includes:
     - Metadata such as versioning and source tags
 
 Output:
-    - File saved to output/numpy_dtypes/numpy_with_metadata.safetensors
+    - File saved to tests/models/numpy_dtypes directory.
 """
 
 import os
@@ -20,7 +20,7 @@ import numpy as np
 import numpy.typing as npt
 from safetensors.numpy import save_file
 
-OUTPUT_DIR = "output/safetensors_numpy"
+OUTPUT_DIR = "tests/models/safetensors_numpy"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 

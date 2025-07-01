@@ -7,8 +7,11 @@ of ones, serialized in SafeTensors format. These files are intended for validati
 type inference and parsing behavior in post-processing tools.
 
 Output:
-    Files are saved in the output/safetensors_torch directory and named as:
+    Files are saved in the tests/models/safetensors_torch directory and named as:
     test_torch_<dtype>.safetensors (e.g., test_torch_float32.safetensors)
+
+Output:
+    - File saved to tests/models/safetensors_torch directory.
 """
 
 import os
@@ -18,7 +21,7 @@ import pytest
 import torch
 from safetensors.torch import save_file
 
-OUTPUT_DIR = "output/safetensors_torch"
+OUTPUT_DIR = "tests/models/safetensors_torch"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 SUPPORTED_DTYPES: List[torch.dtype] = [

@@ -3,7 +3,7 @@
 # ✅ Usage (Offline or CI)
 # docker pull yourdockerhubuser/ai-forensics:v1.2.0
 # python3 tools/sbom_verify.py yourdockerhubuser/ai-forensics:v1.2.0 release/sbom.spdx.json
-# 
+#
 # This script can be extended to validate:
 # - SBOM component versions vs dpkg -l or rpm -qa inside image (via container runtime)
 # - File hashes inside container image against SBOM claims
@@ -15,19 +15,18 @@ import sys
 from typing import List
 from pathlib import Path
 
+
 def extract_image_layers(image: str) -> List[str]:
-    result = subprocess.run(
-        ["docker", "inspect", image],
-        stdout=subprocess.PIPE,
-        check=True
-    )
+    result = subprocess.run(["docker", "inspect", image], stdout=subprocess.PIPE, check=True)
     inspect_data = json.loads(result.stdout)
     return inspect_data[0]["RootFS"]["Layers"]
+
 
 def load_sbom(sbom_path: Path) -> List[str]:
     sbom = json.loads(sbom_path.read_text())
     packages = [p["name"] for p in sbom.get("packages", [])]
     return packages
+
 
 def main():
     image = sys.argv[1]
@@ -46,6 +45,7 @@ def main():
         print("⚠️  Fewer packages than layers — may be missing info")
     else:
         print("✅ SBOM package count is sufficient")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

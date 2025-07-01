@@ -1,4 +1,4 @@
-# Source Signing  
+# Source Signing
 
 >This should be moved into its own repository and referenced from this project.
 
@@ -465,4 +465,3 @@ if current_hash() != EXPECTED_HASH:
 | Module Execution Lock      | Prevent direct file execution  | ✅ Yes                 |
 | CI Signature Enforcement   | Signed commits/tags            | 🔒 Highly recommended |
 | Fingerprint Lock           | Optional for offline/airgapped | 🧱 Advanced           |
-

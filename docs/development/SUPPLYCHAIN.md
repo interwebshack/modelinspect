@@ -65,11 +65,11 @@ Run this command in an offline setting to verify full integrity:
 poetry run verify-release ./release
 ```
 
-This includes:  
-- GPG signature check of .tar.gz  
-- Hash validation via manifest.yaml  
-- Cosign verification of OCI image  
-- Optional SBOM-to-layer comparison  
+This includes:
+- GPG signature check of .tar.gz
+- Hash validation via manifest.yaml
+- Cosign verification of OCI image
+- Optional SBOM-to-layer comparison
 
 ---
 

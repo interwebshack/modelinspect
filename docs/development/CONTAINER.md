@@ -168,9 +168,9 @@ podman run --rm \
 
 ## 📜 Provenance Support
 
-- Container images are signed with Cosign  
-- Execution produces signed SBOM and attestation bundle  
-- Optional support for in-toto attestations (planned)  
+- Container images are signed with Cosign
+- Execution produces signed SBOM and attestation bundle
+- Optional support for in-toto attestations (planned)
 
 ---
 
@@ -179,4 +179,3 @@ podman run --rm \
 - **Manifest-based verification** ensures the actual Python source matches a signed SHA256 hash list
 - **Fingerprint check** provides offline immutability by locking the entire tool to a specific digest
 - **Cosign signature** ensures container was built and signed by an authorized party (see SECURITY.md)
-

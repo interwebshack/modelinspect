@@ -11,6 +11,9 @@ Supported dtypes include:
     - Signed integers: int8, int16, int32, int64
     - Unsigned integers: uint8
     - Boolean: bool_
+
+Output:
+- File saved to tests/models/numpy_dtypes directory.
 """
 
 import os
@@ -20,7 +23,7 @@ import numpy as np
 import pytest
 from safetensors.numpy import save_file
 
-OUTPUT_DIR = "output/safetensors_numpy"
+OUTPUT_DIR = "tests/models/safetensors_numpy"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 SUPPORTED_DTYPES = [

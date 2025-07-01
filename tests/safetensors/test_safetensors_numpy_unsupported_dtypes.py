@@ -4,6 +4,9 @@ for use in testing the robustness of the `ai-forensics` tool.
 
 This module creates valid safetensors files using NumPy and then corrupts the header
 to simulate unsupported or invalid dtypes (e.g., complex numbers, non-standard types).
+
+Output:
+- File saved to tests/models/numpy_dtypes directory.
 """
 
 import json
@@ -13,7 +16,7 @@ import struct
 import numpy as np
 from safetensors.numpy import save_file
 
-OUTPUT_DIR = "output/safetensors_numpy"
+OUTPUT_DIR = "tests/models/safetensors_numpy"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 

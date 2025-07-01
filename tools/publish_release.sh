@@ -5,7 +5,7 @@
 #
 # Usage (after building artifacts):
 # ./publish_release.sh v1.2.0
-# 
+#
 # When offline, ensure gh is pre-installed and authenticated using a saved token.
 
 set -e

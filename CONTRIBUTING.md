@@ -8,7 +8,7 @@
 https://github.com/executablebooks/.github/blob/master/CONTRIBUTING.md
 -->
 
-<!-- 
+<!--
 Possible additions to the Guidelines
 - Follow PEP8 + Google-style docstrings
 - All code must be Python 3.10+ compatible - This will be covered by the current supported versions of Python.
@@ -24,32 +24,32 @@ Possible additions to the Guidelines
 # Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue,
-email, or any other method with the owners of this repository before making a change. 
+email, or any other method with the owners of this repository before making a change.
 
 Please note we have a code of conduct, please follow it in all your interactions with the project.
 
 ## Pull Request Process
 
-1. Ensure any install or build dependencies are removed before the end of the layer when doing a 
+1. Ensure any install or build dependencies are removed before the end of the layer when doing a
    build.
-2. Update the appropriate documentation with details of changes to the interface, this includes new environment 
+2. Update the appropriate documentation with details of changes to the interface, this includes new environment
    variables, exposed ports, useful file locations and container parameters.
 3. Increase the version numbers in any examples files and the README.md to the new version that this
    Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
-4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you 
+4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you
    do not have permission to do that, you may request the second reviewer to merge it for you.
 
 ## Code of Conduct
 
 ### Our Pledge
 
-We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, caste, color, religion, or sexual identity and orientation.  
-  
-We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.  
+We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, caste, color, religion, or sexual identity and orientation.
+
+We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
 
 ### Our Standards
 
-Examples of behavior that contributes to a positive environment for our community include:  
+Examples of behavior that contributes to a positive environment for our community include:
 
 - Demonstrating empathy and kindness toward other people
 - Being respectful of differing opinions, viewpoints, and experiences
@@ -57,57 +57,57 @@ Examples of behavior that contributes to a positive environment for our communit
 - Accepting responsibility and apologizing to those affected by our mistakes, and learning from the experience
 - Focusing on what is best not just for us as individuals, but for the overall community
 
-Examples of unacceptable behavior include:  
+Examples of unacceptable behavior include:
 
-- The use of sexualized language or imagery, and sexual attention or advances of any kind  
-- Trolling, insulting or derogatory comments, and personal or political attacks  
-- Public or private harassment  
-- Publishing others’ private information, such as a physical or email address, without their explicit permission  
-- Other conduct which could reasonably be considered inappropriate in a professional setting  
+- The use of sexualized language or imagery, and sexual attention or advances of any kind
+- Trolling, insulting or derogatory comments, and personal or political attacks
+- Public or private harassment
+- Publishing others’ private information, such as a physical or email address, without their explicit permission
+- Other conduct which could reasonably be considered inappropriate in a professional setting
 
 ### Enforcement Responsibilities
 
-Community leaders are responsible for clarifying and enforcing our standards of acceptable behavior and will take appropriate and fair corrective action in response to any behavior that they deem inappropriate, threatening, offensive, or harmful.  
-  
-Community leaders have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, and will communicate reasons for moderation decisions when appropriate.  
+Community leaders are responsible for clarifying and enforcing our standards of acceptable behavior and will take appropriate and fair corrective action in response to any behavior that they deem inappropriate, threatening, offensive, or harmful.
+
+Community leaders have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, and will communicate reasons for moderation decisions when appropriate.
 
 ### Scope
 
-This Code of Conduct applies within all community spaces, and also applies when an individual is officially representing the community in public spaces. Examples of representing our community include using an official email address, posting via an official social media account, or acting as an appointed representative at an online or offline event.  
+This Code of Conduct applies within all community spaces, and also applies when an individual is officially representing the community in public spaces. Examples of representing our community include using an official email address, posting via an official social media account, or acting as an appointed representative at an online or offline event.
 
 ### Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at [INSERT CONTACT METHOD]. All complaints will be reviewed and investigated promptly and fairly.  
-  
-All community leaders are obligated to respect the privacy and security of the reporter of any incident.  
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at [INSERT CONTACT METHOD]. All complaints will be reviewed and investigated promptly and fairly.
+
+All community leaders are obligated to respect the privacy and security of the reporter of any incident.
 
 ### Enforcement Guidelines
 
-Community leaders will follow these Community Impact Guidelines in determining the consequences for any action they deem in violation of this Code of Conduct:  
+Community leaders will follow these Community Impact Guidelines in determining the consequences for any action they deem in violation of this Code of Conduct:
 
-**1. Correction**  
+**1. Correction**
 
-Community Impact: Use of inappropriate language or other behavior deemed unprofessional or unwelcome in the community.  
-  
-Consequence: A private, written warning from community leaders, providing clarity around the nature of the violation and an explanation of why the behavior was inappropriate. A public apology may be requested.  
+Community Impact: Use of inappropriate language or other behavior deemed unprofessional or unwelcome in the community.
 
-**2. Warning**  
+Consequence: A private, written warning from community leaders, providing clarity around the nature of the violation and an explanation of why the behavior was inappropriate. A public apology may be requested.
 
-Community Impact: A violation through a single incident or series of actions.  
-  
-Consequence: A warning with consequences for continued behavior. No interaction with the people involved, including unsolicited interaction with those enforcing the Code of Conduct, for a specified period of time. This includes avoiding interactions in community spaces as well as external channels like social media. Violating these terms may lead to a temporary or permanent ban.  
+**2. Warning**
+
+Community Impact: A violation through a single incident or series of actions.
+
+Consequence: A warning with consequences for continued behavior. No interaction with the people involved, including unsolicited interaction with those enforcing the Code of Conduct, for a specified period of time. This includes avoiding interactions in community spaces as well as external channels like social media. Violating these terms may lead to a temporary or permanent ban.
 
 **3. Temporary Ban**
 
-Community Impact: A serious violation of community standards, including sustained inappropriate behavior.  
-  
-Consequence: A temporary ban from any sort of interaction or public communication with the community for a specified period of time. No public or private interaction with the people involved, including unsolicited interaction with those enforcing the Code of Conduct, is allowed during this period. Violating these terms may lead to a permanent ban.  
+Community Impact: A serious violation of community standards, including sustained inappropriate behavior.
+
+Consequence: A temporary ban from any sort of interaction or public communication with the community for a specified period of time. No public or private interaction with the people involved, including unsolicited interaction with those enforcing the Code of Conduct, is allowed during this period. Violating these terms may lead to a permanent ban.
 
 **4. Permanent Ban**
 
-Community Impact: Demonstrating a pattern of violation of community standards, including sustained inappropriate behavior, harassment of an individual, or aggression toward or disparagement of classes of individuals.  
-  
-Consequence: A permanent ban from any sort of public interaction within the community.  
+Community Impact: Demonstrating a pattern of violation of community standards, including sustained inappropriate behavior, harassment of an individual, or aggression toward or disparagement of classes of individuals.
+
+Consequence: A permanent ban from any sort of public interaction within the community.
 
 ### Attribution
 
@@ -116,4 +116,99 @@ available at [http://contributor-covenant.org/version/2/1](http://contributor-co
 
 Community Impact Guidelines were inspired by [Mozilla’s code of conduct enforcement ladder](https://github.com/mozilla/inclusion).
 
-For answers to common questions about this code of conduct, see the [FAQ](https://www.contributor-covenant.org/faq/). Translations are available at [translations](https://www.contributor-covenant.org/translations/).  
+For answers to common questions about this code of conduct, see the [FAQ](https://www.contributor-covenant.org/faq/). Translations are available at [translations](https://www.contributor-covenant.org/translations/).
+
+
+# 🧬 Contributing to AI Forensics
+
+Thank you for your interest in contributing to AI Forensics!
+
+This project enforces strict security, reproducibility, and compliance workflows. Please follow the guidelines below to ensure your contribution is reviewed, validated, and accepted.
+
+---
+
+## 🧩 Contribution Checklist
+
+Before submitting a pull request:
+
+- ✅ All new Python code is formatted with `black`
+- ✅ Static type checks pass with `mypy`
+- ✅ Code passes linting with `ruff`
+- ✅ You updated the signed `manifest.json` and `fingerprint.lock` using `make sign fingerprint`
+- ✅ You did **not** modify `ai_forensics/` without updating the manifest
+- ✅ `verifier.py` passes (`python3 integrity/verifier.py`)
+- ✅ All commits are signed (if required)
+- ✅ You updated/add test coverage for your feature
+- ✅ You ran `pre-commit run --all-files`
+
+---
+
+## 🔨 How to Contribute
+
+1. Fork the repository and create a feature branch:
+```bash
+git checkout -b feature/my-feature
+```
+
+2. Set up environment:
+```bash
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+```
+
+3. Install pre-commit hooks:
+```bash
+pre-commit install
+```
+
+4. Make changes and commit:
+```bash
+make sign fingerprint
+pre-commit run --all-files
+git add .
+git commit -S -m "feat: explain what you changed"
+```
+5. Push and open a pull request targeting `main`.
+
+---
+
+## 🔐 Integrity Policy
+
+If your PR modifies `ai_forensics/`, `manifest.json`, or `fingerprint.lock`:
+* The CI will verify your changes were signed
+* Your PR will be rejected if you skip the signing process
+
+---
+
+## 🧪 Run the Tool Locally
+
+```bash
+python3 ai_forensics/cli.py scan /path/to/model.pth --output-dir output/
+```
+
+---
+
+## 🛡 Code of Conduct
+
+This project adheres to the Contributor Covenant. Please be respectful and constructive.
+
+---
+
+## 📬 Questions?
+
+Open a GitHub Discussion or tag `@maintainers` in a comment.
+
+---
+
+## 🧰 Tooling
+
+| Area        | Tool           |
+|-------------|----------------|
+| Formatting  | `black`        |
+| Linting     | `ruff`         |
+| Typing      | `mypy`         |
+| SAST        | `bandit`, CodeQL |
+| Precommit   | `pre-commit`   |
+| Signing     | `cosign`, `openssl` |
+| Container   | `docker`, `podman` |
+| Security    | `ossf/scorecard` |

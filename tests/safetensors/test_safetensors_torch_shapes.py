@@ -8,7 +8,8 @@ This module is intended to create a suite of test files that include:
     - Higher-dimensional shapes
     - Large tensors
 
-Files are saved under the output/safetensors_torch directory.
+Output:
+    - File saved to tests/models/safetensors_torch directory.
 """
 
 import os
@@ -18,7 +19,7 @@ import pytest
 import torch
 from safetensors.torch import save_file
 
-OUTPUT_DIR = "output/safetensors_torch"
+OUTPUT_DIR = "tests/models/safetensors_torch"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 SHAPES = [

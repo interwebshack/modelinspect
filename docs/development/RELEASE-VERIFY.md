@@ -71,4 +71,3 @@ Validate that:
 - There are no unknown layers or packages not accounted for in SBOM
 
 ---
-

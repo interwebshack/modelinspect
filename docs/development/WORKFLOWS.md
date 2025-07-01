@@ -46,7 +46,7 @@ This document describes each automated workflow in this repository, the conditio
 - Runs static analysis with SonarCloud
 - Enforces Quality Gate policy (optional fail)
 
-> Requires GitHub secret: `SONAR_TOKEN`  
+> Requires GitHub secret: `SONAR_TOKEN`
 > SonarCloud project must exist: `yourgithubuser_ai-forensics`
 
 ---
@@ -164,3 +164,146 @@ Need to refactor these two tables to the actual workflow
 * 📋 Pre-commit Git hooks to warn if manifest is outdated?
 * 🛡 A status badge for “Integrity Verified” in your README?
 
+## 🔁 Optional Enhancements
+
+| Feature                 | Tools                                   |
+| ----------------------- | --------------------------------------- |
+| 🧪 Dependency Scanning  | `pip-audit`, `safety`, `dependabot`     |
+| 🧾 License Scanning     | `reuse`, `licensee`                     |
+| 🔐 Pre-commit Git Hooks | `pre-commit`, `.pre-commit-config.yaml` |
+| 📈 Coverage Reporting   | `pytest-cov`, Codecov                   |
+
+---
+
+# 🔄 AI Forensics – GitHub Security & CI Workflows
+
+This document describes all GitHub Actions workflows used to secure, verify, and validate the AI Forensics codebase and container images.
+
+---
+
+## 🧬 1. Integrity Verification (`sign-verify.yml`)
+
+**Purpose:** Ensure all source files match a signed manifest and fingerprint at every commit or pull request.
+
+| Trigger        | `push`, `pull_request` (main) |
+| Tools Used     | `cryptography` (Python)       |
+
+✅ Verifies:
+- SHA256 hashes of all source files
+- Manifest signature with Cosign/OpenSSL
+- Hardcoded source fingerprint digest
+
+---
+
+## 📦 2. Release Signing (`tag-release.yml`)
+
+**Purpose:** Automatically regenerate and sign `manifest.json` and `fingerprint.lock` on every tagged release (`vX.Y.Z`).
+
+| Trigger        | `push` to `v*.*.*` tag       |
+| Tools Used     | Python, Cosign, GitHub Releases |
+
+✅ Uploads:
+- `manifest.json` + `manifest.sig`
+- `fingerprint.lock` + `fingerprint.lock.sig`
+
+---
+
+## 🐳 3. Secure Container Build (`build-container.yml`)
+
+**Purpose:** Build and sign the AI Forensics container image with embedded entrypoint verification.
+
+| Trigger        | `push` to `main`, manual     |
+| Tools Used     | Docker/Podman, Cosign        |
+
+✅ Container contains:
+- `/integrity/verifier.py` called on start
+- `/ai_forensics/` source directory
+- Signature-enforced startup via `entrypoint.sh`
+
+---
+
+## 🛡 4. Deployment Signature Verification (`cosign-verify.yml`)
+
+**Purpose:** Block deployments of unsigned or tampered containers.
+
+| Trigger        | `deployment`, `workflow_dispatch` |
+| Tools Used     | Cosign                             |
+
+✅ Verifies:
+- OCI image was signed
+- Rekor transparency log (optional)
+
+---
+
+## 🧼 5. Linting & Type Checking (`lint.yml`)
+
+**Purpose:** Enforce clean, formatted, type-safe Python code.
+
+| Trigger        | `push`, `pull_request`       |
+| Tools Used     | `ruff`, `black`, `mypy`      |
+
+✅ Checks:
+- Code style (PEP8)
+- Unused imports, error-prone patterns
+- Static type safety
+
+---
+
+## 🔐 6. SAST – Static Application Security Testing (`sast.yml`)
+
+**Purpose:** Identify vulnerabilities before runtime.
+
+### Option A: Bandit
+
+| Trigger        | `push`, `pull_request`       |
+| Tools Used     | `bandit`                     |
+
+### Option B: CodeQL (preferred)
+
+| Trigger        | `push`, `pull_request`, `cron` |
+| Tools Used     | `github/codeql-action`         |
+
+✅ Detects:
+- Unsafe function use (e.g. `eval`, `exec`)
+- Insecure file access
+- Insecure defaults
+
+---
+
+## 📈 7. OpenSSF Scorecard (`openssf-scorecard.yml`)
+
+**Purpose:** Monitor supply chain hygiene & best practices.
+
+| Trigger        | Weekly (`cron`), manual       |
+| Tools Used     | `ossf/scorecard-action`       |
+
+✅ Checks:
+- CI hardening
+- Signed commits and releases
+- Token permissions
+- Dependency update automation
+
+---
+
+## 🧩 Recommendations
+
+| Area            | Tool                     |
+|-----------------|--------------------------|
+| License Hygiene | `licensee`, `reuse`      |
+| Dependency Scan | `pip-audit`, `safety`    |
+| Hook Pre-checks | `pre-commit` framework   |
+
+---
+
+## 📂 Suggested `.github/workflows/` Layout
+
+```
+.github/workflows/
+├── sign-verify.yml
+├── tag-release.yml
+├── build-container.yml
+├── cosign-verify.yml
+├── lint.yml
+├── sast.yml
+├── openssf-scorecard.yml
+```

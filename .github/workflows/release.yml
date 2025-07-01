@@ -86,7 +86,7 @@ jobs:
           echo "- Coverage: [Link to SonarCloud report](https://sonarcloud.io/dashboard?id=interwebshack_ai-forensics)" >> release-artifacts/release.md
           echo "- Quality Gate: [Badge](https://sonarcloud.io/api/project_badges/measure?project=interwebshack_ai-forensics&metric=alert_status)" >> release-artifacts/release.md
           echo "- Signature Verification: \`cosign verify --key cosign.pub ghcr.io/interwebshack/ai-forensics:$TAG\`" >> release-artifacts/release.md
-          
+
 
       - name: Upload Release Summary
         uses: actions/upload-artifact@v4
