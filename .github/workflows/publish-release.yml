@@ -1,9 +1,9 @@
 name: Publish GitHub Release
 
-# on:
-#   workflow_run:
-#     workflows: ["Release Build + Sign"]
-#     types: [completed]
+on:
+  workflow_run:
+    workflows: ["Release Build + Sign"]
+    types: [completed]
 
 jobs:
   publish:
