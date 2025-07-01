@@ -10,7 +10,7 @@ Command-line tool for inspecting AI/ML models.
 | Tests (main)      | [![Tests]][tests]                                                                           |
 | Matrix Tests      | [![Matrix]][matrix]                                                                         |
 | SonarCloud        | [![Quality Gate]][quality_gate]                                                             |
-| CodeQL            | [![CodeQL Security Scan][codeql]                                                            |
+| CodeQL            | [![CodeQL Security Scan]][codeql]                                                           |
 
 | Coverage          | [![Coverage]][coverage]                                                                     |
 | Maintainability   | [![Maintainability Rating]][maintainability]                                                |
