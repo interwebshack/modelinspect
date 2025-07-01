@@ -1,0 +1,43 @@
+name: Tag & Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'   # Semantic version tags only
+
+jobs:
+  release-integrity:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: integrity
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install cryptography
+        run: pip install cryptography
+
+      - name: Generate manifest and fingerprint
+        run: |
+          python signer.py
+          python fingerprint.py
+
+      - name: Sign artifacts with Cosign
+        run: |
+          cosign sign-blob --key private.pem \
+            --output-signature manifest.sig manifest.json
+          cosign sign-blob --key private.pem \
+            --output-signature fingerprint.lock.sig fingerprint.lock
+
+      - name: Publish to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            manifest.json
+            manifest.sig
+            fingerprint.lock
+            fingerprint.lock.sig
