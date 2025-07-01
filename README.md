@@ -5,7 +5,7 @@ Command-line tool for inspecting AI/ML models.
 
 | Category          | Badge                                                                                       |
 |-------------------|---------------------------------------------------------------------------------------------|
-| License           | [![License: MIT]][license]                                                                  |
+| License           | [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)][license]             |
 | Black Formatter   | [![black]][black]                                                                           |
 | Tests (main)      | [![Tests]][tests]                                                                           |
 | Matrix Tests      | [![Matrix]][matrix]                                                                         |
@@ -18,7 +18,7 @@ Command-line tool for inspecting AI/ML models.
 | Release & Signing | [![Release]][release]                                                                       |
 | Release Verified  | [![Release Verified]][release_verified]                                                     |
 
-[license]: https://opensource.org/license/mit/
+[license]: https://opensource.org/license/MIT
 [black]: https://github.com/interwebshack/ai-forensics/actions/workflows/black.yml/badge.svg
 [tests]: https://github.com/interwebshack/ai-forensics/actions/workflows/test.yml/badge.svg
 [matrix]: https://github.com/interwebshack/ai-forensics/actions/workflows/test-matrix.yml/badge.svg
