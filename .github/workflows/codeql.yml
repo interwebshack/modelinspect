@@ -1,5 +1,12 @@
-# Use GitHub CodeQL (recommended for broad coverage)
-# ✅ Finds dangerous patterns like unsafe deserialization, insecure function usage, and insecure file handling.
+# ----------------------------------------
+# 🔍 CodeQL Security Scan Workflow
+# ----------------------------------------
+# Runs on every push, pull request, and weekly at 3 AM UTC on Mondays.
+# Scans for security vulnerabilities like:
+# - Unsafe deserialization
+# - Insecure function usage
+# - Insecure file handling
+# ----------------------------------------
 
 name: CodeQL Security Scan
 
@@ -7,22 +14,53 @@ on:
   push:
   pull_request:
   schedule:
-    - cron: '0 3 * * 1'  # Weekly Monday 3 AM UTC
+    - cron: '0 3 * * 1'  # Weekly Monday at 3 AM UTC
 
 jobs:
   analyze:
     name: Analyze with CodeQL
     runs-on: ubuntu-latest
+
+    # ----------------------------------------
+    # 🔐 Set required permissions
+    # ----------------------------------------
     permissions:
-      security-events: write
-      actions: read
+      security-events: write  # Needed to upload SARIF results to GitHub
+      actions: read           # Read metadata about actions used
+      contents: read          # Required for most scanning workflows
+
     strategy:
       fail-fast: false
       matrix:
-        language: [python]
+        language: [python]  # ✅ Add more languages here if needed (e.g., ['python', 'javascript'])
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: github/codeql-action/init@v2
+      # ----------------------------------------
+      # 🧾 Step 1: Checkout source code
+      # ----------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # ----------------------------------------
+      # ⚙️ Step 2: Initialize CodeQL
+      # ----------------------------------------
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-      - uses: github/codeql-action/analyze@v2
+
+          # Optional: Pin a specific CodeQL CLI bundle
+          # tools: https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.21.4/codeql-bundle-linux64.tar.gz
+
+      # ----------------------------------------
+      # 🔄 Step 3 (Optional): Autobuild the project
+      # Uncomment if your project needs to be built before analysis
+      # ----------------------------------------
+      # - name: Autobuild project
+      #   uses: github/codeql-action/autobuild@v3
+
+      # ----------------------------------------
+      # 🧠 Step 4: Run CodeQL Analysis
+      # ----------------------------------------
+      - name: Analyze with CodeQL
+        uses: github/codeql-action/analyze@v3
