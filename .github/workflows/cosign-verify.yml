@@ -1,0 +1,14 @@
+name: Verify Container Signature
+
+on:
+  workflow_dispatch:
+  deployment:
+
+jobs:
+  verify-container:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cosign verify
+        run: |
+          cosign verify --key integrity/public.pem ghcr.io/${{ github.repository_owner }}/ai-forensics:latest
