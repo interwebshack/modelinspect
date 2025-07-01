@@ -1,10 +1,10 @@
 name: Verify Image Signature
 
-# on:
-#   workflow_run:
-#     workflows: ["Release Build + Sign"]
-#     types:
-#       - completed
+on:
+  workflow_run:
+    workflows: ["Release Build + Sign"]
+    types:
+      - completed
 
 jobs:
   verify:

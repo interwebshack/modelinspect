@@ -2,7 +2,8 @@ name: SonarCloud
 
 on:
   workflow_run:
-    workflows: ["Pytest & Coverage"]
+    # workflows: ["Pytest & Coverage"]
+    workflows: ["never"]
     types:
       - completed
 
