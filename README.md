@@ -5,7 +5,7 @@ Command-line tool for inspecting AI/ML models.
 
 | Badge                                                  |                                                        |
 |--------------------------------------------------------|--------------------------------------------------------|
-| [![License: MIT][license_img]][license_link]           | [![Coverage]][coverage]                                |
+| [![License: MIT][license_img]][license_link]           | [![Coverage][coverage_img]][coverage_link] |
 | [![black]][black]                                      | [![Maintainability Rating]][maintainability]           |
 | [![Tests]][tests]                                      | [![Container]][container]                              |
 | [![Matrix]][matrix]                                    | [![Release]][release]                                  |
