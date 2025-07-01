@@ -3,6 +3,7 @@
 # AI Forensics  
 Command-line tool for inspecting AI/ML models.
 
+|                                                        |                                                                        |
 |--------------------------------------------------------|------------------------------------------------------------------------|
 | [![License: MIT][license_img]][license_link]           | [![Coverage][coverage_img]][coverage_link]                             |
 | [![black]][black]                                      | [![Maintainability Rating][maintainability_img]][maintainability_link] |
