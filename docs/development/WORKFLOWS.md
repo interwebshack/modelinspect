@@ -137,3 +137,30 @@ AI Forensics enforces digital signatures on all released artifacts:
 | `push` tag `v*.*.*` | Production release                   | `tag-release.yml`                        |
 | `workflow_dispatch` | Manual integrity build or deployment | All workflows (optional)                 |
 | `deployment`        | Trigger before prod deployment       | `cosign-verify.yml`                      |
+
+Need to refactor these two tables to the actual workflow
+| Workflow Name           | Function                                     | Tools Involved                      |
+| ----------------------- | -------------------------------------------- | ----------------------------------- |
+| `lint.yml`              | Code style & quality                         | `ruff` or `flake8`, `black`, `mypy` |
+| `sast.yml`              | Static security analysis                     | `bandit`, GitHub CodeQL             |
+| `openssf-scorecard.yml` | OpenSSF Scorecard compliance & hygiene check | `ossf/scorecard-action`             |
+
+---
+
+## 🧩 Workflow Implementation Order
+
+| Step | Action                           | Workflow              |
+| ---- | -------------------------------- | --------------------- |
+| 1    | Developer pushes code            | `sign-verify.yml`     |
+| 2    | Maintainer tags release          | `tag-release.yml`     |
+| 3    | Build container (auto or manual) | `build-container.yml` |
+| 4    | Deploy to prod                   | `cosign-verify.yml`   |
+
+---
+
+## Continue Development
+
+* 🔐 Separate GitHub environments for staging/prod?
+* 📋 Pre-commit Git hooks to warn if manifest is outdated?
+* 🛡 A status badge for “Integrity Verified” in your README?
+
