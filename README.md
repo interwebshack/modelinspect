@@ -9,7 +9,7 @@ Command-line tool for inspecting AI/ML models.
 | Black Formatter   | [![black]][black]                                                                           |
 | Tests (main)      | [![Tests]][tests]                                                                           |
 | Matrix Tests      | [![Matrix]][matrix]                                                                         |
-| SonarCloud        | [![Quality Gate]][quality_gate]                                                             |
+| SonarCloud        | [![Quality Gate][quality_gate_img]][quality_gate_link]                                      |
 | CodeQL            | [![CodeQL Security Scan]][codeql]                                                           |
 
 | Coverage          | [![Coverage]][coverage]                                                                     |
@@ -22,7 +22,8 @@ Command-line tool for inspecting AI/ML models.
 [black]: https://github.com/interwebshack/ai-forensics/actions/workflows/black.yml/badge.svg
 [tests]: https://github.com/interwebshack/ai-forensics/actions/workflows/test.yml/badge.svg
 [matrix]: https://github.com/interwebshack/ai-forensics/actions/workflows/test-matrix.yml/badge.svg
-[quality_gate]: https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics
+[quality_gate_img]: https://sonarcloud.io/api/project_badges/measure?project=interwebshack_ai-forensics&metric=alert_status
+[quality_gate_link]: https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics
 [codeql]: https://github.com/interwebshack/ai-forensics/actions/workflows/codeql.yml/badge.svg
 [coverage]: https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics
 [maintainability]: https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics
