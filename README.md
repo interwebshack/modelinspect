@@ -3,7 +3,6 @@
 # AI Forensics  
 Command-line tool for inspecting AI/ML models.
 
-| Badge                                                  |                                                                        |
 |--------------------------------------------------------|------------------------------------------------------------------------|
 | [![License: MIT][license_img]][license_link]           | [![Coverage][coverage_img]][coverage_link]                             |
 | [![black]][black]                                      | [![Maintainability Rating][maintainability_img]][maintainability_link] |
@@ -28,8 +27,6 @@ Command-line tool for inspecting AI/ML models.
 [container]: https://github.com/interwebshack/ai-forensics/actions/workflows/build-container.yml/badge.svg
 [release]: https://github.com/interwebshack/ai-forensics/actions/workflows/release.yml/badge.svg
 [release_verified]: https://github.com/interwebshack/ai-forensics/actions/workflows/verify-release.yml/badge.svg
-
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=interwebshack_ai-forensics&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics)
 
 ## Supported Model Formats
 
