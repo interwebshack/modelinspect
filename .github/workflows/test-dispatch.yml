@@ -2,7 +2,7 @@
 name: Manual Test Workflow
 
 on:
-  push:
+  workflow_dispatch:
 
 jobs:
   echo:
