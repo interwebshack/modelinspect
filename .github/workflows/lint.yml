@@ -1,0 +1,31 @@
+name: Code Linting
+
+on:
+  push:
+    paths:
+      - '**.py'
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install linters
+        run: |
+          pip install ruff black mypy
+
+      - name: Run Ruff (Python linter)
+        run: ruff ai_forensics integrity
+
+      - name: Run Black (code format check)
+        run: black --check ai_forensics integrity
+
+      - name: Run MyPy (type checking)
+        run: mypy ai_forensics integrity
