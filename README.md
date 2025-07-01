@@ -3,22 +3,17 @@
 # AI Forensics  
 Command-line tool for inspecting AI/ML models.
 
-| Category          | Badge                                                                                       |
-|-------------------|---------------------------------------------------------------------------------------------|
-| License           | [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)][license]             |
-| Black Formatter   | [![black]][black]                                                                           |
-| Tests (main)      | [![Tests]][tests]                                                                           |
-| Matrix Tests      | [![Matrix]][matrix]                                                                         |
-| SonarCloud        | [![Quality Gate][quality_gate_img]][quality_gate_link]                                      |
-| CodeQL            | [![CodeQL Security Scan][codeql_img]][codeql_link]                                          |
+| Badge             |                                                                                             |
+|--------------------------------------------------------|--------------------------------------------------------|
+| [![License: MIT][license_img]][license_link]           | [![Coverage]][coverage]                                |
+| [![black]][black]                                      | [![Maintainability Rating]][maintainability]           |
+| [![Tests]][tests]                                      | [![Container]][container]                              |
+| [![Matrix]][matrix]                                    | [![Release]][release]                                  |
+| [![Quality Gate][quality_gate_img]][quality_gate_link] | [![Release Verified]][release_verified]                |
+| [![CodeQL Security Scan][codeql_img]][codeql_link]     |                                                        |
 
-| Coverage          | [![Coverage]][coverage]                                                                     |
-| Maintainability   | [![Maintainability Rating]][maintainability]                                                |
-| Container Build   | [![Container]][container]                                                                   |
-| Release & Signing | [![Release]][release]                                                                       |
-| Release Verified  | [![Release Verified]][release_verified]                                                     |
-
-[license]: https://opensource.org/license/MIT
+[license_img]: https://img.shields.io/badge/License-MIT-yellow.svg
+[license_link]: https://opensource.org/license/MIT
 [black]: https://github.com/interwebshack/ai-forensics/actions/workflows/black.yml/badge.svg
 [tests]: https://github.com/interwebshack/ai-forensics/actions/workflows/test.yml/badge.svg
 [matrix]: https://github.com/interwebshack/ai-forensics/actions/workflows/test-matrix.yml/badge.svg
