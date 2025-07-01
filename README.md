@@ -3,14 +3,14 @@
 # AI Forensics  
 Command-line tool for inspecting AI/ML models.
 
-| Badge                                                  |                                                        |
-|--------------------------------------------------------|--------------------------------------------------------|
-| [![License: MIT][license_img]][license_link]           | [![Coverage][coverage_img]][coverage_link] |
-| [![black]][black]                                      | [![Maintainability Rating]][maintainability]           |
-| [![Tests]][tests]                                      | [![Container]][container]                              |
-| [![Matrix]][matrix]                                    | [![Release]][release]                                  |
-| [![Quality Gate][quality_gate_img]][quality_gate_link] | [![Release Verified]][release_verified]                |
-| [![CodeQL Security Scan][codeql_img]][codeql_link]     |                                                        |
+| Badge                                                  |                                                                        |
+|--------------------------------------------------------|------------------------------------------------------------------------|
+| [![License: MIT][license_img]][license_link]           | [![Coverage][coverage_img]][coverage_link]                             |
+| [![black]][black]                                      | [![Maintainability Rating][maintainability_img]][maintainability_link] |
+| [![Tests]][tests]                                      | [![Container]][container]                                              |
+| [![Matrix]][matrix]                                    | [![Release]][release]                                                  |
+| [![Quality Gate][quality_gate_img]][quality_gate_link] | [![Release Verified]][release_verified]                                |
+| [![CodeQL Security Scan][codeql_img]][codeql_link]     |                                                                        |
 
 [license_img]: https://img.shields.io/badge/License-MIT-yellow.svg
 [license_link]: https://opensource.org/license/MIT
@@ -23,10 +23,13 @@ Command-line tool for inspecting AI/ML models.
 [codeql_link]: https://github.com/interwebshack/ai-forensics/actions/workflows/codeql.yml
 [coverage_img]: https://sonarcloud.io/api/project_badges/measure?project=interwebshack_ai-forensics&metric=coverage
 [coverage_link]: https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics
-[maintainability]: https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics
+[maintainability_img]: https://sonarcloud.io/api/project_badges/measure?project=interwebshack_ai-forensics&metric=sqale_rating
+[maintainability_link]: https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics
 [container]: https://github.com/interwebshack/ai-forensics/actions/workflows/build-container.yml/badge.svg
 [release]: https://github.com/interwebshack/ai-forensics/actions/workflows/release.yml/badge.svg
 [release_verified]: https://github.com/yourgithubuser/ai-forensics/actions/workflows/verify-release.yml
+
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=interwebshack_ai-forensics&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=interwebshack_ai-forensics)
 
 ## Supported Model Formats
 
