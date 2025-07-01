@@ -1,10 +1,12 @@
-name: Build Container
+✅ Purpose: Ensures only signed, verified containers are built and available.
+name: Build Secure Container
 
 on:
   push:
   #  branches: [main]
   branches: [never]
   pull_request:
+  workflow_dispatch:  # Optional manual trigger
 
 jobs:
   build:
