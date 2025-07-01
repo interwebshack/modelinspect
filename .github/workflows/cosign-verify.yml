@@ -1,3 +1,4 @@
+✅ Purpose: Protects downstream environments by rejecting unsigned containers.
 name: Verify Container Signature
 
 on:
