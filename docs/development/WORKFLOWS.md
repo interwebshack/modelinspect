@@ -127,3 +127,13 @@ AI Forensics enforces digital signatures on all released artifacts:
 - [`sonar-project.properties`](./sonar-project.properties) – SonarCloud config
 
 ---
+
+## 🔐 Recommended Triggers and Events
+
+| Event               | Use Case                             | Workflow                                 |
+| ------------------- | ------------------------------------ | ---------------------------------------- |
+| `push` to `main`    | Routine development + CI             | `sign-verify.yml`, `build-container.yml` |
+| `pull_request`      | Validate contributor code integrity  | `sign-verify.yml`                        |
+| `push` tag `v*.*.*` | Production release                   | `tag-release.yml`                        |
+| `workflow_dispatch` | Manual integrity build or deployment | All workflows (optional)                 |
+| `deployment`        | Trigger before prod deployment       | `cosign-verify.yml`                      |
